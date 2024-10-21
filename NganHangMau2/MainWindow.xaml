@@ -1,0 +1,116 @@
+﻿<Window x:Class="NganHangMau2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NganHangMau2"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Blood Storage"  WindowState="Maximized">
+    <Grid>
+        <materialDesign:Card Margin="5" Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <!-- TextBox for Entered By -->
+                    <TextBox 
+                        materialDesign:HintAssist.Hint="Tên người nhập"
+                        x:Name="txtEnteredBy" Margin="0,0,0,10" 
+                        Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+
+                    <TextBox x:Name="txtId"  
+                             materialDesign:HintAssist.Hint="Mã túi máu"
+                             Foreground="Gray" 
+                             Margin="0,0,0,10" 
+                             PreviewKeyDown="txtId_PreviewKeyDown"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                    
+                    <!-- Note for Blood Type Selection -->
+                    <TextBlock Text="Chọn nhóm máu:" Margin="0,0,0,5"/>
+                    <!-- StackPanel for ABO and Rhesus Blood Type on the same row -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <ComboBox
+                            Background="AntiqueWhite"
+                            Margin="5"
+                            Width="150"
+                            x:Name="cmbABOBloodType"
+                            materialDesign:HintAssist.Hint="Nhóm máu ABO"
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                            <ComboBoxItem Content="A"/>
+                            <ComboBoxItem Content="B"/>
+                            <ComboBoxItem Content="AB"/>
+                            <ComboBoxItem Content="O"/>
+                        </ComboBox>
+                        <ComboBox
+                            Background="AntiqueWhite"
+                            Margin="5"
+                            Width="150"
+                            x:Name="cmbRhesusBloodType" 
+                            materialDesign:HintAssist.Hint="Nhóm máu Rhesus"
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                            <ComboBoxItem Content="Dương tính"/>
+                            <ComboBoxItem Content="Âm tính"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <!-- ComboBox for Blood Product Type and Volume -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <ComboBox 
+                            Margin="5"
+                            x:Name="cmbBloodProductType"
+                            materialDesign:HintAssist.Hint="Loại chế phẩm"
+                            Width="150" Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                            <ComboBoxItem Content="Hồng cầu lắng"/>
+                            <ComboBoxItem Content="PFC"/>
+                            <ComboBoxItem Content="Tiểu cầu"/>
+                        </ComboBox>
+                        
+                        <ComboBox 
+                            Margin="5"
+                            x:Name="cmbVolume" 
+                            materialDesign:HintAssist.Hint="Thể tích"
+                            Width="150" Style="{StaticResource MaterialDesignOutlinedComboBox}">
+                            <ComboBoxItem Content="250"/>
+                            <ComboBoxItem Content="350"/>
+                            <ComboBoxItem Content="450"/>
+                        </ComboBox>
+                        
+                        <DatePicker
+                            Margin="5"
+                            x:Name="dtpProductionDate"
+                            materialDesign:HintAssist.Hint="Ngày sản xuất"
+                            materialDesign:TextFieldAssist.HasClearButton="True"    
+                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Width="128" Height="50" />
+                        
+                        <DatePicker
+                            Margin="5"
+                            x:Name="dtpExpiryDate"
+                            materialDesign:HintAssist.Hint="Ngày sản xuất"
+                            materialDesign:TextFieldAssist.HasClearButton="True"    
+                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Width="128" Height="50" />
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button x:Name="btnAdd" Content="Add" Width="75" Click="btnAdd_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                        <Button x:Name="btnSave" Content="Save" Width="75" Margin="10,0,0,0" Click="btnSave_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                        <Button x:Name="btnPrint" Content="In" Width="75" Margin="10,0,0,0" Click="btnPrint_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                        <Button x:Name="btnConfig" Content="Config" Width="75" Margin="10,0,0,0" Click="btnConfigureDatabase_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <DataGrid Grid.Row="1" x:Name="dgvBloodBags" AutoGenerateColumns="False" VerticalScrollBarVisibility="Auto">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Mã túi máu" Binding="{Binding Id}" />
+                        <DataGridTextColumn Header="Nhóm máu" Binding="{Binding BloodGroup}" />
+                        <DataGridTextColumn Header="Loại chế phẩm" Binding="{Binding BloodProductType}" />
+                        <DataGridTextColumn Header="Ngày sản xuất" Binding="{Binding ProductionDate, StringFormat=dd/MM/yyyy}" />
+                        <DataGridTextColumn Header="Ngày hết hạn" Binding="{Binding ExpiryDate, StringFormat=dd/MM/yyyy}" />
+                        <DataGridTextColumn Header="Người nhập" Binding="{Binding EnteredBy}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
+</Window>

@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>blood-donation.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="blood-donation.ico" />
+    <None Remove="BloodStorageReport.rdlc" />
+    <None Remove="SupReport.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+    <PackageReference Include="ReportViewerCore.NETCore" Version="15.1.19" />
+    <PackageReference Include="ReportViewerCore.WinForms" Version="15.1.19" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.10" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="WindowsFormsIntegration">
+		  <HintPath>..\..\..\..\..\..\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\WindowsFormsIntegration.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Analyzer Include="C:\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\6.0.30\analyzers\dotnet\System.Windows.Forms.Analyzers.dll" />
+		<Analyzer Include="C:\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\6.0.30\analyzers\dotnet\cs\System.Windows.Forms.Analyzers.CSharp.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="blood-donation.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="blood-donation.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="BloodStorageReport.rdlc">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="SupReport.rdlc">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="BloodStorageDataset.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>BloodStorageDataset.xsd</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="BloodStorageDataset.xsd">
+	    <Generator>MSDataSetGenerator</Generator>
+	    <LastGenOutput>BloodStorageDataset.Designer.cs</LastGenOutput>
+	  </None>
+	</ItemGroup>
+
+</Project>
