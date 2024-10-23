@@ -104,40 +104,51 @@ namespace NganHangMau2
         }
         private void SaveBloodBagsToDatabase()
         {
-            if(bloodBags.Count == 0)
+            if (bloodBags.Count == 0)
             {
                 MessageBox.Show("Không có túi máu nào để lưu");
                 return;
             }
-            string connectionString = ConfigurationManager.ConnectionStrings["BloodBankDB"].ConnectionString;
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            string connectionString = ConfigHelper.GetConnectionString("BloodBankDB");
+
+            try
             {
-                connection.Open();
-
-                foreach (var bloodBag in bloodBags)
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    string query = "INSERT INTO BloodBags (Id, BloodGroup, ProductionDate, ExpiryDate, BloodProductType, EnteredBy, EnteredDate) " +
-                                   "VALUES (@Id, @BloodGroup, @ProductionDate, @ExpiryDate, @BloodProductType, @EnteredBy, @EnteredDate)";
+                    connection.Open();
 
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    foreach (var bloodBag in bloodBags)
                     {
-                        command.Parameters.AddWithValue("@Id", bloodBag.Id);
-                        command.Parameters.AddWithValue("@BloodGroup", bloodBag.BloodGroup);
-                        command.Parameters.AddWithValue("@ProductionDate", bloodBag.ProductionDate);
-                        command.Parameters.AddWithValue("@ExpiryDate", bloodBag.ExpiryDate);
-                        command.Parameters.AddWithValue("@BloodProductType", bloodBag.BloodProductType);
-                        command.Parameters.AddWithValue("@EnteredBy", bloodBag.EnteredBy);
-                        command.Parameters.AddWithValue("@EnteredDate", bloodBag.EnteredDate);
+                        string query = "INSERT INTO BloodBags (Id, BloodGroup, ProductionDate, ExpiryDate, BloodProductType, EnteredBy, EnteredDate) " +
+                                       "VALUES (@Id, @BloodGroup, @ProductionDate, @ExpiryDate, @BloodProductType, @EnteredBy, @EnteredDate)";
 
-                        command.ExecuteNonQuery();
+                        using (SqlCommand command = new SqlCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@Id", bloodBag.Id);
+                            command.Parameters.AddWithValue("@BloodGroup", bloodBag.BloodGroup);
+                            command.Parameters.AddWithValue("@ProductionDate", bloodBag.ProductionDate);
+                            command.Parameters.AddWithValue("@ExpiryDate", bloodBag.ExpiryDate);
+                            command.Parameters.AddWithValue("@BloodProductType", bloodBag.BloodProductType);
+                            command.Parameters.AddWithValue("@EnteredBy", bloodBag.EnteredBy);
+                            command.Parameters.AddWithValue("@EnteredDate", bloodBag.EnteredDate);
+
+                            command.ExecuteNonQuery();
+                        }
                     }
                 }
+
+                MessageBox.Show("Blood bags saved successfully!");
             }
-
-            MessageBox.Show("Blood bags saved successfully!");
+            catch (SqlException ex)
+            {
+                MessageBox.Show($"An error occurred while saving blood bags to the database: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unexpected error occurred: {ex.Message}");
+            }
         }
-
         private void btnScan_Click(object sender, RoutedEventArgs e)
         {
             // Scan button logic
@@ -180,7 +191,7 @@ namespace NganHangMau2
         }
 
         private void txtId_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
+            {
             if (e.Key == Key.Tab)
             {
                 if (string.IsNullOrEmpty(txtEnteredBy.Text))

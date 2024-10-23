@@ -60,6 +60,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Update="App.config">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	  <None Update="BloodStorageDataset.xsd">
 	    <Generator>MSDataSetGenerator</Generator>
 	    <LastGenOutput>BloodStorageDataset.Designer.cs</LastGenOutput>
