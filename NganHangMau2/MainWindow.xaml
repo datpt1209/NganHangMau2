@@ -7,110 +7,181 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Blood Storage"  WindowState="Maximized">
+    <Window.Resources>
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="10"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="LightBlue"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        <materialDesign:Card Margin="5" Padding="10">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0">
-                    <!-- TextBox for Entered By -->
-                    <TextBox 
-                        materialDesign:HintAssist.Hint="Tên người nhập"
-                        x:Name="txtEnteredBy" Margin="0,0,0,10" 
-                        Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="SidebarColumn" Width="70"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-                    <TextBox x:Name="txtId"  
-                             materialDesign:HintAssist.Hint="Mã túi máu"
-                             Foreground="Gray" 
-                             Margin="0,0,0,10" 
-                             PreviewKeyDown="txtId_PreviewKeyDown"
-                             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
-                    
-                    <!-- Note for Blood Type Selection -->
-                    <TextBlock Text="Chọn nhóm máu:" Margin="0,0,0,5"/>
-                    <!-- StackPanel for ABO and Rhesus Blood Type on the same row -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <ComboBox
-                            Background="AntiqueWhite"
-                            Margin="5"
-                            Width="150"
-                            x:Name="cmbABOBloodType"
-                            materialDesign:HintAssist.Hint="Nhóm máu ABO"
-                            Style="{StaticResource MaterialDesignOutlinedComboBox}">
-                            <ComboBoxItem Content="A"/>
-                            <ComboBoxItem Content="B"/>
-                            <ComboBoxItem Content="AB"/>
-                            <ComboBoxItem Content="O"/>
-                        </ComboBox>
-                        <ComboBox
-                            Background="AntiqueWhite"
-                            Margin="5"
-                            Width="150"
-                            x:Name="cmbRhesusBloodType" 
-                            materialDesign:HintAssist.Hint="Nhóm máu Rhesus"
-                            Style="{StaticResource MaterialDesignOutlinedComboBox}">
-                            <ComboBoxItem Content="Dương tính"/>
-                            <ComboBoxItem Content="Âm tính"/>
-                        </ComboBox>
-                    </StackPanel>
-                    <!-- ComboBox for Blood Product Type and Volume -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <ComboBox 
-                            Margin="5"
-                            x:Name="cmbBloodProductType"
-                            materialDesign:HintAssist.Hint="Loại chế phẩm"
-                            Width="150" Style="{StaticResource MaterialDesignOutlinedComboBox}">
-                            <ComboBoxItem Content="Hồng cầu lắng"/>
-                            <ComboBoxItem Content="PFC"/>
-                            <ComboBoxItem Content="Tiểu cầu"/>
-                        </ComboBox>
-                        
-                        <ComboBox 
-                            Margin="5"
-                            x:Name="cmbVolume" 
-                            materialDesign:HintAssist.Hint="Thể tích"
-                            Width="150" Style="{StaticResource MaterialDesignOutlinedComboBox}">
-                            <ComboBoxItem Content="250"/>
-                            <ComboBoxItem Content="350"/>
-                            <ComboBoxItem Content="450"/>
-                        </ComboBox>
-                        
-                        <DatePicker
-                            Margin="5"
-                            x:Name="dtpProductionDate"
-                            materialDesign:HintAssist.Hint="Ngày sản xuất"
-                            materialDesign:TextFieldAssist.HasClearButton="True"    
-                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Width="128" Height="50" />
-                        
-                        <DatePicker
-                            Margin="5"
-                            x:Name="dtpExpiryDate"
-                            materialDesign:HintAssist.Hint="Ngày sản xuất"
-                            materialDesign:TextFieldAssist.HasClearButton="True"    
-                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Width="128" Height="50" />
-                    </StackPanel>
-                    
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                        <Button x:Name="btnAdd" Content="Add" Width="75" Click="btnAdd_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
-                        <Button x:Name="btnSave" Content="Save" Width="75" Margin="10,0,0,0" Click="btnSave_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
-                        <Button x:Name="btnPrint" Content="In" Width="75" Margin="10,0,0,0" Click="btnPrint_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
-                        <Button x:Name="btnConfig" Content="Config" Width="75" Margin="10,0,0,0" Click="btnConfigureDatabase_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
-                    </StackPanel>
-                </StackPanel>
+        <!-- Sidebar -->
+        <materialDesign:Card Grid.Column="0"       
+       x:Name="nav_pnl" HorizontalAlignment="Left" Width="55" Background="LightGray">
+            <StackPanel x:Name="Sidebar" Background="LightGray">
 
-                <DataGrid Grid.Row="1" x:Name="dgvBloodBags" AutoGenerateColumns="False" VerticalScrollBarVisibility="Auto">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Mã túi máu" Binding="{Binding Id}" />
-                        <DataGridTextColumn Header="Nhóm máu" Binding="{Binding BloodGroup}" />
-                        <DataGridTextColumn Header="Loại chế phẩm" Binding="{Binding BloodProductType}" />
-                        <DataGridTextColumn Header="Ngày sản xuất" Binding="{Binding ProductionDate, StringFormat=dd/MM/yyyy}" />
-                        <DataGridTextColumn Header="Ngày hết hạn" Binding="{Binding ExpiryDate, StringFormat=dd/MM/yyyy}" />
-                        <DataGridTextColumn Header="Người nhập" Binding="{Binding EnteredBy}" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
+                <Grid Height="90">
+                    <!--// Menu title text //-->
+                    <TextBlock Margin="0,0,0,42" Text="MENU" Foreground="Black" 
+               FontSize="22"
+               Background="Transparent"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Bottom" Name="menu">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=nav_pnl, Path=Width}" Value="55">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ElementName=nav_pnl, Path=Width}" Value="170">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <!--// Toggle Button //-->
+                    <ToggleButton x:Name="SidebarToggleButton" Grid.Column="0"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Left"
+                  Margin="10,-20,0,0"
+                  Height="30"
+                  Width="30"
+                  BorderThickness="0"
+                  Checked="SidebarToggleButton_Checked"
+                  Unchecked="SidebarToggleButton_Unchecked"    
+                  Style="{StaticResource MaterialDesignHamburgerToggleButton}" >
+                        <!--// Toggle Button - Checked, Unchecked events //-->
+                        <ToggleButton.Triggers>
+                            <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+                                <BeginStoryboard>
+                                    <Storyboard x:Name="HideStackPanel">
+                                        <DoubleAnimation    
+                                Storyboard.TargetName="nav_pnl"
+                                Storyboard.TargetProperty="Width"
+                                BeginTime="0:0:0"
+                                From="170" To="55"
+                                Duration="0:0:0.3"
+                                >
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="ToggleButton.Checked">
+                                <BeginStoryboard>
+                                    <Storyboard x:Name="ShowStackPanel">
+                                        <DoubleAnimation    
+                                Storyboard.TargetName="nav_pnl"
+                                Storyboard.TargetProperty="Width"
+                                BeginTime="0:0:0"
+                                From="55" To="170"
+                                Duration="0:0:0.3"
+                                >
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ToggleButton.Triggers>
+                    </ToggleButton>
+                </Grid>
+
+                <ListView  x:Name="SidebarMenu" Background="Transparent"  BorderBrush="Transparent"
+   ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="SidebarMenu_SelectionChanged">
+
+                    <!--// Home //-->
+                    <ListViewItem 
+                        Tag="Nhap"
+            Name="HomeItem"
+            HorizontalAlignment="Left" Margin="0,0,0,0">
+
+                        <StackPanel Orientation="Horizontal" Width="170">
+                            <materialDesign:PackIcon Kind="PencilBoxMultiple" Margin="5,0,0,0"
+                                         Height="30" Width="30" />
+                            <TextBlock Text="Nhap" Margin="0,0,0,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=nav_pnl, Path=Width}" Value="55">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=nav_pnl, Path=Width}" Value="170">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </ListViewItem>
+                    <!--// Home //-->
+
+
+                    <ListViewItem  Name="Output" Tag="Xuat"
+                       HorizontalAlignment="Left" Margin="0,0,0,0" 
+                       >
+
+                        <StackPanel Orientation="Horizontal" Width="170">
+                            <materialDesign:PackIcon Kind="HomeOutline" Margin="5,0,0,0"
+                               Height="30" Width="30" />
+                            <TextBlock Text="Xuất" Margin="0,0,0,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=nav_pnl, Path=Width}" Value="55">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=nav_pnl, Path=Width}" Value="170">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </ListViewItem>
+                    <!--// Home //-->
+                    <ListViewItem 
+            Name="Search"
+            HorizontalAlignment="Left" Margin="0,0,0,0" Tag="Timkiem"
+            >
+
+                        <StackPanel Orientation="Horizontal" Width="170">
+                            <materialDesign:PackIcon Kind="CardSearchOutline" Margin="5,0,0,0"
+                               Height="30" Width="30" />
+                            <TextBlock Text="Tìm kiếm" Margin="0,0,0,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=nav_pnl, Path=Width}" Value="55">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ElementName=nav_pnl, Path=Width}" Value="170">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </ListViewItem>
+                </ListView>
+       
+            </StackPanel>
         </materialDesign:Card>
+            
+
+        <!-- Main Content -->
+        <ContentControl x:Name="MainContent" Grid.Column="1" />
     </Grid>
 </Window>

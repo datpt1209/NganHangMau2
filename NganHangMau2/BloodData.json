@@ -1,0 +1,6 @@
+{
+  "ABOBloodTypes": [ "A", "B", "AB", "O" ],
+  "RhesusBloodTypes": [ "Dương tính", "Âm tính" ],
+  "BloodProductTypes": [ "Hồng cầu lắng", "PFC", "Tiểu cầu" ],
+  "Volumes": [ "250", "350", "450" ]
+}

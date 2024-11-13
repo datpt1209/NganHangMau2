@@ -1,0 +1,105 @@
+﻿<Window x:Class="NganHangMau2.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NganHangMau2"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Đăng nhập"
+        WindowStartupLocation="CenterScreen"
+        SizeToContent="WidthAndHeight"
+        > <!-- Automatically size the window to fit the content -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <materialDesign:Card Grid.Row="1" Width="357" Height="250" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid>
+                <Grid.Resources>
+                    <Style TargetType="Grid">
+                        <Setter Property="Margin" Value="15 0 15 0"></Setter>
+                    </Style>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="10"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row ="0" 
+                           Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                           Text="Đăng nhập" Height="45" 
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Top" />
+
+                <Grid Grid.Row="1">
+                    <TextBox 
+                        x:Name="txtUserName"
+                        materialDesign:HintAssist.Hint="Tên đăng nhập"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                </Grid>
+                <Grid Grid.Row="2">
+                    <PasswordBox
+                        x:Name="txtPassword"
+                        materialDesign:HintAssist.Hint="Mật khẩu"
+                        Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" >
+                    </PasswordBox>
+                </Grid>
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Button Name="btnLogin"
+                            Click="btnLogin_Click"
+                            Width="110"
+                            Content="Đăng nhập"
+                            IsDefault="True"                            
+                            IsEnabled="True"
+                            Style="{StaticResource MaterialDesignRaisedButton}" />
+
+                    <Button Grid.Column="1"    
+                            Name="btnCancel"
+                            Click="btnCancel_Click"
+                            Style="{StaticResource MaterialDesignRaisedButton}"    
+                            Width="110"   
+                            Background="OrangeRed"
+                            ToolTip="Resource name: MaterialDesignRaisedButton" Content="Thoát"></Button>
+                </Grid>
+                <Grid Grid.Row="5">
+                    <Button Grid.Column="2"
+                            Content="Config"
+                            Cursor="Hand" 
+                            Canvas.Left="102"
+                            Name="btnConfig"
+                            Click="btnConfig_Click"
+                            Margin="10">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <TextBlock TextDecorations="Underline">
+                                 <ContentPresenter />
+                                </TextBlock>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Foreground" Value="Blue" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                        <Setter Property="Foreground" Value="Red" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Grid>
+        </materialDesign:Card>
+    </Grid>
+</Window>

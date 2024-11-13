@@ -98,7 +98,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.38878in</Height>
+                  <Height>0.4735in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -108,13 +108,21 @@
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Id.Value</Value>
-                                  <Style>
-                                    <FontSize>14pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
+								  <TextRun>
+									  <Value>=Left(Fields!Id.Value, Len(Fields!Id.Value) - 8)</Value>
+									  <Style>
+										  <FontFamily>Arial</FontFamily>
+										  <FontSize>12pt</FontSize>
+									  </Style>
+								  </TextRun>
+								  <TextRun>
+									  <Value>=Right(Fields!Id.Value, 8)</Value>
+									  <Style>
+										  <FontFamily>Arial</FontFamily>
+										  <FontSize>14pt</FontSize>
+										  <FontWeight>Bold</FontWeight>
+									  </Style>
+								  </TextRun>
                               </TextRuns>
                               <Style>
                                 <TextAlign>Center</TextAlign>
@@ -126,8 +134,17 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
                             <RightBorder>
-                              <Width>1.25pt</Width>
+                              <Style>None</Style>
                             </RightBorder>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -163,6 +180,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -192,6 +221,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -223,6 +264,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -254,6 +307,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -285,6 +350,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -316,6 +393,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -347,6 +436,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -378,6 +479,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -389,7 +502,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.51476in</Height>
+                  <Height>0.51615in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -417,6 +530,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -449,6 +574,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -483,8 +620,17 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
                             <RightBorder>
-                              <Width>1.25pt</Width>
+                              <Style>None</Style>
                             </RightBorder>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -521,6 +667,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -550,6 +708,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -581,6 +751,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -612,6 +794,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -643,6 +837,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -674,6 +880,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -705,6 +923,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -736,6 +966,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -747,7 +989,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.30833in</Height>
+                  <Height>0.47639in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -775,16 +1017,17 @@
                               <Style>Solid</Style>
                             </Border>
                             <TopBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </TopBorder>
                             <BottomBorder>
-                              <Width>1.25pt</Width>
+                              <Style>Double</Style>
+                              <Width>2.25pt</Width>
                             </BottomBorder>
                             <LeftBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </LeftBorder>
                             <RightBorder>
-                              <Width>1pt</Width>
+                              <Style>None</Style>
                             </RightBorder>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -822,11 +1065,18 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <TopBorder>
+                              <Color>Gray</Color>
+                            </TopBorder>
                             <BottomBorder>
-                              <Width>1.25pt</Width>
+                              <Style>Double</Style>
+                              <Width>2.25pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Color>Gray</Color>
+                            </LeftBorder>
                             <RightBorder>
-                              <Width>1.25pt</Width>
+                              <Style>None</Style>
                             </RightBorder>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -861,16 +1111,17 @@
                               <Style>Solid</Style>
                             </Border>
                             <TopBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </TopBorder>
                             <BottomBorder>
-                              <Width>1.25pt</Width>
+                              <Style>Double</Style>
+                              <Width>2.25pt</Width>
                             </BottomBorder>
                             <LeftBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </LeftBorder>
                             <RightBorder>
-                              <Width>1pt</Width>
+                              <Style>None</Style>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -902,16 +1153,17 @@
                               <Style>Solid</Style>
                             </Border>
                             <TopBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </TopBorder>
                             <BottomBorder>
-                              <Width>1.25pt</Width>
+                              <Style>Double</Style>
+                              <Width>2.25pt</Width>
                             </BottomBorder>
                             <LeftBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </LeftBorder>
                             <RightBorder>
-                              <Width>1pt</Width>
+                              <Style>None</Style>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -945,16 +1197,17 @@
                               <Style>Solid</Style>
                             </Border>
                             <TopBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </TopBorder>
                             <BottomBorder>
-                              <Width>1.25pt</Width>
+                              <Style>Double</Style>
+                              <Width>2.25pt</Width>
                             </BottomBorder>
                             <LeftBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </LeftBorder>
                             <RightBorder>
-                              <Width>1pt</Width>
+                              <Style>None</Style>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -988,16 +1241,17 @@
                               <Style>Solid</Style>
                             </Border>
                             <TopBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </TopBorder>
                             <BottomBorder>
-                              <Width>1.25pt</Width>
+                              <Style>Double</Style>
+                              <Width>2.25pt</Width>
                             </BottomBorder>
                             <LeftBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </LeftBorder>
                             <RightBorder>
-                              <Width>1pt</Width>
+                              <Style>None</Style>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -1031,16 +1285,17 @@
                               <Style>Solid</Style>
                             </Border>
                             <TopBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </TopBorder>
                             <BottomBorder>
-                              <Width>1.25pt</Width>
+                              <Style>Double</Style>
+                              <Width>2.25pt</Width>
                             </BottomBorder>
                             <LeftBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </LeftBorder>
                             <RightBorder>
-                              <Width>1pt</Width>
+                              <Style>None</Style>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -1074,16 +1329,17 @@
                               <Style>Solid</Style>
                             </Border>
                             <TopBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </TopBorder>
                             <BottomBorder>
-                              <Width>1.25pt</Width>
+                              <Style>Double</Style>
+                              <Width>2.25pt</Width>
                             </BottomBorder>
                             <LeftBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </LeftBorder>
                             <RightBorder>
-                              <Width>1pt</Width>
+                              <Style>None</Style>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -1117,16 +1373,17 @@
                               <Style>Solid</Style>
                             </Border>
                             <TopBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </TopBorder>
                             <BottomBorder>
-                              <Width>1.25pt</Width>
+                              <Style>Double</Style>
+                              <Width>2.25pt</Width>
                             </BottomBorder>
                             <LeftBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </LeftBorder>
                             <RightBorder>
-                              <Width>1pt</Width>
+                              <Style>None</Style>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -1160,16 +1417,17 @@
                               <Style>Solid</Style>
                             </Border>
                             <TopBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </TopBorder>
                             <BottomBorder>
-                              <Width>1.25pt</Width>
+                              <Style>Double</Style>
+                              <Width>2.25pt</Width>
                             </BottomBorder>
                             <LeftBorder>
-                              <Width>1pt</Width>
+                              <Color>Gray</Color>
                             </LeftBorder>
                             <RightBorder>
-                              <Width>1pt</Width>
+                              <Style>None</Style>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -1239,16 +1497,17 @@
                             <Style>Solid</Style>
                           </Border>
                           <TopBorder>
-                            <Width>1pt</Width>
+                            <Color>Gray</Color>
                           </TopBorder>
                           <BottomBorder>
-                            <Width>1.25pt</Width>
+                            <Style>Double</Style>
+                            <Width>2.25pt</Width>
                           </BottomBorder>
                           <LeftBorder>
-                            <Width>1pt</Width>
+                            <Color>Gray</Color>
                           </LeftBorder>
                           <RightBorder>
-                            <Width>1pt</Width>
+                            <Style>None</Style>
                           </RightBorder>
                           <VerticalAlign>Middle</VerticalAlign>
                           <PaddingLeft>2pt</PaddingLeft>
@@ -1272,10 +1531,8 @@
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <RepeatRowHeaders>true</RepeatRowHeaders>
-            <KeepTogether>true</KeepTogether>
             <DataSetName>SubReportDataSet</DataSetName>
-            <Height>1.21188in</Height>
+            <Height>1.46604in</Height>
             <Width>10.82843in</Width>
             <Style>
               <Border>
@@ -1284,7 +1541,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>3.14167cm</Height>
+        <Height>4.06771cm</Height>
         <Style>
           <Border>
             <Style>None</Style>

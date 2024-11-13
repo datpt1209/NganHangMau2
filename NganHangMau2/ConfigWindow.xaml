@@ -4,19 +4,36 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NganHangMau2"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+     
         mc:Ignorable="d"
-        Title="ConfigWindow" Height="450" Width="800">
+        Title="ConfigWindow" Height="350" Width="400">
     <Grid>
         <StackPanel Margin="10">
-            <TextBlock Text="Server Name:" />
-            <TextBox Name="txtServerName" />
-            <TextBlock Text="Database Name:" Margin="0,10,0,0" />
-            <TextBox Name="txtDatabaseName" />
-            <TextBlock Text="User ID:" Margin="0,10,0,0" />
-            <TextBox Name="txtUserId" />
-            <TextBlock Text="Password:" Margin="0,10,0,0" />
-            <PasswordBox Name="txtPassword" />
-            <Button Content="Save" Margin="0,20,0,0" Click="btnSave_Click" />
+            <TextBox 
+                materialDesign:HintAssist.Hint="Server"
+                x:Name="txtServer" Margin="0,0,0,10" 
+                Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+            <TextBox 
+                materialDesign:HintAssist.Hint="Database"
+                x:Name="txtDatabase" Margin="0,0,0,10" 
+                Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+            <TextBox 
+                materialDesign:HintAssist.Hint="User ID"
+                x:Name="txtUserId" Margin="0,0,0,10" 
+                Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+            <PasswordBox
+                materialDesign:HintAssist.Hint="Password"
+                x:Name="txtPassword" Margin="0,0,0,10"
+                Style="{StaticResource MaterialDesignOutlinedPasswordBox}"/>
+            
+            <StackPanel Margin="5" Orientation="Horizontal">
+                <Button Name ="btnSave" Content="Save" Margin="10" Click="btnSave_Click" />
+                <Button Name="btnCancel"  Content="Cancel" Margin="10" Click="btnCancel_Click" />
+                <Button Name="btnTestConection" Click="btnTestConection_Click" Content="Test Conection" Margin="10" />
+
+            </StackPanel>
+            
         </StackPanel>
     </Grid>
 </Window>
