@@ -52,8 +52,8 @@ namespace NganHangMau2
                     case "Xuat":
                         MainContent.Content = new OutputUserControl();
                         break;
-                    case "TimKiem":
-                        MainContent.Content = new InputUserControl();
+                    case "Timkiem":
+                        MainContent.Content = new SearchUserControl();
                         break;
                 }
             }

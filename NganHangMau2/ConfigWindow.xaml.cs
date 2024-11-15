@@ -40,7 +40,6 @@ namespace NganHangMau2
                 config.AppSettings.Settings["Server"].Value = txtServer.Text;
                 config.AppSettings.Settings["Database"].Value = txtDatabase.Text;
                 config.AppSettings.Settings["Username"].Value = txtUserId.Text;
-
                 var encryptedPassword = AesEncryption.Encrypt(txtPassword.Password);
                 config.AppSettings.Settings["Password"].Value = encryptedPassword;
                 config.Save(ConfigurationSaveMode.Full);
