@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -73,6 +74,7 @@ namespace NganHangMau2
             string bloodGroup = aboBloodType + (rhesusBloodType == "Dương tính" ? "+" : "-");
             string bloodProductType = cmbBloodProductType.SelectedItem as string ?? string.Empty;
             string volume = cmbVolume.SelectedItem as string ?? string.Empty;
+            string storageTemperature = "2-6°C";
 
             if (bloodProductType == "Hồng cầu lắng")
             {
@@ -81,20 +83,27 @@ namespace NganHangMau2
             if (bloodProductType == "PFC")
             {
                 bloodProductType = $"HUYẾT TƯƠNG TƯƠI ĐÔNG LẠNH {volume} mL";
+                storageTemperature = "-30°C";
             }
             if (bloodProductType == "Tiểu cầu")
             {
                 bloodProductType = $"TIỂU CẦU ĐẬM ĐẶC {volume} mL";
+                storageTemperature = "20-25°C lắc liên tục";
             }
 
             BloodBag bloodBag = new BloodBag
             {
                 Id = txtId.Text,
                 BloodGroup = bloodGroup,
+                RhesusBloodType = rhesusBloodType,
+                Volume = volume,
                 ProductionDate = dtpProductionDate.SelectedDate ?? DateTime.Now,
                 ExpiryDate = dtpExpiryDate.SelectedDate ?? DateTime.Now,
                 BloodProductType = bloodProductType,
-                EnteredBy = currentUserName
+                EnteredBy = currentUserName, 
+                EnteredDate = DateTime.Now,
+                StorageTemperature = storageTemperature,
+                Status = "Available"
             };
 
             bloodBags.Add(bloodBag);
@@ -118,45 +127,63 @@ namespace NganHangMau2
                 MessageBox.Show("Không có túi máu nào để lưu");
                 return;
             }
+
             try
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-
-                    foreach (var bloodBag in bloodBags)
+                    using (SqlTransaction transaction = connection.BeginTransaction())
                     {
-                        string query = "INSERT INTO BloodBags (Id, BloodGroup, ProductionDate, ExpiryDate, BloodProductType, EnteredBy, EnteredDate) " +
-                                       "VALUES (@Id, @BloodGroup, @ProductionDate, @ExpiryDate, @BloodProductType, @EnteredBy, @EnteredDate)";
-
-                        using (SqlCommand command = new SqlCommand(query, connection))
+                        try
                         {
-                            command.Parameters.AddWithValue("@Id", bloodBag.Id);
-                            command.Parameters.AddWithValue("@BloodGroup", bloodBag.BloodGroup);
-                            command.Parameters.AddWithValue("@ProductionDate", bloodBag.ProductionDate);
-                            command.Parameters.AddWithValue("@ExpiryDate", bloodBag.ExpiryDate);
-                            command.Parameters.AddWithValue("@BloodProductType", bloodBag.BloodProductType);
-                            command.Parameters.AddWithValue("@EnteredBy", bloodBag.EnteredBy);
-                            command.Parameters.AddWithValue("@EnteredDate", bloodBag.EnteredDate);
+                            foreach (var bloodBag in bloodBags.ToList())
+                            {
+                                string query = "INSERT INTO BloodBags (Id, BloodGroup, RhesusBloodType, ProductionDate, ExpiryDate, BloodProductType, Volume, StorageTemperature, EnteredBy, EnteredDate, Status) " +
+                                               "VALUES (@Id, @BloodGroup, @RhesusBloodType, @ProductionDate, @ExpiryDate, @BloodProductType, @Volume, @StorageTemperature, @EnteredBy, @EnteredDate, @Status)";
 
-                            command.ExecuteNonQuery();
+                                using (SqlCommand command = new SqlCommand(query, connection, transaction))
+                                {
+                                    command.Parameters.AddWithValue("@Id", bloodBag.Id);
+                                    command.Parameters.AddWithValue("@BloodGroup", bloodBag.BloodGroup);
+                                    command.Parameters.AddWithValue("@RhesusBloodType", bloodBag.RhesusBloodType);
+                                    command.Parameters.AddWithValue("@ProductionDate", bloodBag.ProductionDate);
+                                    command.Parameters.AddWithValue("@ExpiryDate", bloodBag.ExpiryDate);
+                                    command.Parameters.AddWithValue("@BloodProductType", bloodBag.BloodProductType);
+                                    command.Parameters.AddWithValue("@Volume", bloodBag.Volume);
+                                    command.Parameters.AddWithValue("@StorageTemperature", bloodBag.StorageTemperature);
+                                    command.Parameters.AddWithValue("@EnteredBy", bloodBag.EnteredBy);
+                                    command.Parameters.AddWithValue("@EnteredDate", bloodBag.EnteredDate);
+                                    command.Parameters.AddWithValue("@Status", bloodBag.Status);
+
+                                    command.ExecuteNonQuery();
+                                }
+                            }
+
+                            transaction.Commit();
+                            MessageBox.Show("Blood bags saved successfully!");
+                            PrintBloodBagReport();
+
+                            // Reset the list and clear the text boxes
+                            UpdateBloodBagList();
+                            ClearInputFields();
+                        }
+                        catch (SqlException ex)
+                        {
+                            transaction.Rollback();
+                            MessageBox.Show($"An error occurred while saving blood bags to the database: {ex.Message}");
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            MessageBox.Show($"An unexpected error occurred: {ex.Message}");
                         }
                     }
                 }
-
-                MessageBox.Show("Blood bags saved successfully!");
-                PrintBloodBagReport();
-
-
-                // Reset the list and clear the text boxes
-                bloodBags.Clear();
-                UpdateBloodBagList();
-                ClearInputFields();
-
             }
             catch (SqlException ex)
             {
-                MessageBox.Show($"An error occurred while saving blood bags to the database: {ex.Message}");
+                MessageBox.Show($"An error occurred while connecting to the database: {ex.Message}");
             }
             catch (Exception ex)
             {
@@ -166,6 +193,7 @@ namespace NganHangMau2
 
         private void ClearInputFields()
         {
+            bloodBags.Clear();
             txtId.Clear();
             cmbABOBloodType.SelectedIndex = -1;
             cmbRhesusBloodType.SelectedIndex = -1;
@@ -181,16 +209,38 @@ namespace NganHangMau2
 
         private BloodBag ParseBloodBag(string data)
         {
-            var parts = data.Split('|');
-            return new BloodBag
+            BloodBag bloodBag = new BloodBag();
+
+            // Tách các thông tin từ chuỗi data
+            string[] parts = data.Split('|');
+
+            if (parts.Length >= 8)
             {
-                Id = parts[0],
-                BloodGroup = parts[1],
-                ProductionDate = DateTime.Parse(parts[3]),
-                ExpiryDate = DateTime.Parse(parts[4]),
-                BloodProductType = parts[6],
-                EnteredBy = currentUserName
-            };
+                bloodBag.Id = parts[0].Trim();
+                bloodBag.BloodGroup = parts[1].Trim();
+                bloodBag.RhesusBloodType = parts[1].Trim().Split(' ').Length > 1 ?
+                                            (parts[1].Trim().Split(' ')[1] == "+" ? "Dương tính" : "Âm tính") : string.Empty;
+                bloodBag.ProductionDate = DateTime.Parse(parts[3]);
+                bloodBag.ExpiryDate = DateTime.Parse(parts[4]);
+                bloodBag.EnteredBy = currentUserName;
+                bloodBag.BloodProductType = parts[6].Trim();
+                bloodBag.Volume = ExtractVolume(parts[6].Trim());
+                bloodBag.StorageTemperature = parts[7].Trim();
+                bloodBag.Status = "Available";
+            }
+
+            return bloodBag;
+        }
+
+        private string ExtractVolume(string bloodProductType)
+        {
+            // Biểu thức chính quy để tìm thể tích (số theo sau bởi "mL" hoặc "ml")
+            var match = System.Text.RegularExpressions.Regex.Match(bloodProductType, @"(\d+)\s?mL", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            if (match.Success)
+            {
+                return match.Groups[1].Value + " mL";
+            }
+            return string.Empty;
         }
 
         private void UpdateBloodBagList()
@@ -236,10 +286,11 @@ namespace NganHangMau2
 
         private void txtId_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Tab)
+            if (e.Key == Key.Enter)
             {
                 if (string.IsNullOrEmpty(txtId.Text) || txtId.Text.Length <= 18)
                 {
+                    ClearTxtId(txtId);
                     return;
                 }
                 else

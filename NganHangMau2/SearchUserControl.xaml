@@ -11,11 +11,7 @@
         <local:IndexConverter x:Key="IndexConverter"/>
     </UserControl.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="277*"/>
-            <ColumnDefinition Width="419*"/>
-        </Grid.ColumnDefinitions>
-        <materialDesign:Card Margin="5,5,5,5" Padding="10" Grid.ColumnSpan="2">
+        <materialDesign:Card Margin="1" Padding="10" Grid.ColumnSpan="2">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -23,29 +19,33 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
 
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
                         <DatePicker
                             Margin="5"
-                            Width="150"
                             Name="dtinputDate"
                             materialDesign:HintAssist.Hint="Ngày nhập"
-                            materialDesign:TextFieldAssist.HasClearButton="True"    
-                            Style="{StaticResource MaterialDesignOutlinedDatePicker}" Height="50" />
-
-                    </StackPanel>
-                    
-                    <!-- StackPanel for ABO and Rhesus Blood Type on the same row -->
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            materialDesign:TextFieldAssist.HasClearButton="True" 
+                            Style="{StaticResource MaterialDesignOutlinedDatePicker}" Height="50" Grid.Column="0"/>
 
                         <TextBox x:Name="txtId"  
                                  materialDesign:HintAssist.Hint="Mã túi máu"
-                                 Width="150"
+                                 HorizontalAlignment="Stretch"
                                  Foreground="Gray" 
                                  Margin="5" 
                                  PreviewKeyDown="txtId_PreviewKeyDown"
-                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 Grid.Column="1"/>
+                    </Grid>
 
+                    <!-- StackPanel for ABO and Rhesus Blood Type on the same row -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+
+                     
                         <ComboBox
                             Background="AntiqueWhite"
                             Margin="5"
@@ -122,7 +122,10 @@
                         <DataGridTextColumn Header="Loại chế phẩm" Binding="{Binding BloodProductType}" />
                         <DataGridTextColumn Header="Ngày sản xuất" Binding="{Binding ProductionDate, StringFormat=dd/MM/yyyy}" />
                         <DataGridTextColumn Header="Ngày hết hạn" Binding="{Binding ExpiryDate, StringFormat=dd/MM/yyyy}" />
+                        <DataGridTextColumn Header="Ngày nhập" Binding="{Binding EnteredDate,  StringFormat=dd/MM/yyyy}"/>
                         <DataGridTextColumn Header="Người nhập" Binding="{Binding EnteredBy}" />
+                        <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status}" />
+
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

@@ -7,10 +7,7 @@
         <local:IndexConverter x:Key="IndexConverter"/>
     </UserControl.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="277*"/>
-            <ColumnDefinition Width="419*"/>
-        </Grid.ColumnDefinitions>
+   
         <materialDesign:Card Margin="5,5,5,5" Padding="10" Grid.ColumnSpan="2">
             <Grid>
                 <Grid.RowDefinitions>
@@ -105,6 +102,8 @@
                         <DataGridTextColumn Header="Ngày sản xuất" Binding="{Binding ProductionDate, StringFormat=dd/MM/yyyy}" />
                         <DataGridTextColumn Header="Ngày hết hạn" Binding="{Binding ExpiryDate, StringFormat=dd/MM/yyyy}" />
                         <DataGridTextColumn Header="Người nhập" Binding="{Binding EnteredBy}" />
+                        <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status}" />
+
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

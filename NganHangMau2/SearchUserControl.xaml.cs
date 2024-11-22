@@ -30,7 +30,7 @@ namespace NganHangMau2
         public SearchUserControl()
         {
             InitializeComponent();
-              LoadBloodData();
+            LoadBloodData();
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -107,11 +107,6 @@ namespace NganHangMau2
             SaveBloodBagsToDatabase();
         }
 
-        private void btnConfigureDatabase_Click(object sender, RoutedEventArgs e)
-        {
-            ConfigWindow configWindow = new ConfigWindow();
-            configWindow.ShowDialog();
-        }
         private void SaveBloodBagsToDatabase()
         {
             if (bloodBags.Count == 0)
@@ -175,10 +170,6 @@ namespace NganHangMau2
             dtpProductionDate.SelectedDate = null;
             dtpExpiryDate.SelectedDate = null;
         }
-        private void btnScan_Click(object sender, RoutedEventArgs e)
-        {
-            // Scan button logic
-        }
 
         private BloodBag ParseBloodBag(string data)
         {
@@ -190,7 +181,6 @@ namespace NganHangMau2
                 ProductionDate = DateTime.Parse(parts[3]),
                 ExpiryDate = DateTime.Parse(parts[4]),
                 BloodProductType = parts[6],
-                EnteredBy = currentUserName
             };
         }
 
@@ -237,7 +227,7 @@ namespace NganHangMau2
 
         private void txtId_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Tab)
+            if (e.Key == Key.Enter)
             {
                 if (string.IsNullOrEmpty(txtId.Text) || txtId.Text.Length <= 18)
                 {
@@ -258,16 +248,10 @@ namespace NganHangMau2
                         {
                             string decodedData = Encoding.UTF8.GetString(Convert.FromBase64String(scannedData));
                             BloodBag bloodBag = ParseBloodBag(decodedData);
-
-                            if (bloodBags.Any(b => b.Id == bloodBag.Id))
-                            {
-                                MessageBox.Show("Mã túi máu đã tồn tại trong danh sách");
-                                // Clear the TextBox and set focus back to it
-                                ClearTxtId(textBox);
-                                return;
-                            }
-                            bloodBags.Add(bloodBag);
+                            BloodBag searchBag = SearchBloodBagById(bloodBag.Id);
+                            bloodBags.Add(searchBag);
                             UpdateBloodBagList();
+                            ClearTxtId(textBox);
                         }
                         catch (System.FormatException ex)
                         {
@@ -309,6 +293,55 @@ namespace NganHangMau2
             dgvBloodBags.ItemsSource = results;
         }
 
+        private BloodBag SearchBloodBagById(string id)
+        {
+            BloodBag result = null;
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string query = "SELECT * FROM BloodBags WHERE Id = @Id";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@Id", id);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                result = new BloodBag
+                                {
+                                    Id = reader["Id"].ToString(),
+                                    BloodGroup = reader["BloodGroup"].ToString(),
+                                    ProductionDate = Convert.ToDateTime(reader["ProductionDate"]),
+                                    ExpiryDate = Convert.ToDateTime(reader["ExpiryDate"]),
+                                    BloodProductType = reader["BloodProductType"].ToString(),
+                                    Volume = reader["Volume"].ToString(),
+                                    EnteredBy = reader["EnteredBy"].ToString(),
+                                    EnteredDate = Convert.ToDateTime(reader["EnteredDate"]),
+                                    Status = reader["Status"].ToString()
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show($"An error occurred while searching for the blood bag: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An unexpected error occurred: {ex.Message}");
+            }
+
+            return result;
+        }
+
 
         private List<BloodBag> SearchBloodBags(string id, string aboBloodType, string rhesusBloodType, string bloodProductType, string volume, DateTime? productionDate, DateTime? expiryDate, DateTime? inputDate)
         {
@@ -326,17 +359,13 @@ namespace NganHangMau2
                     {
                         queryBuilder.Append(" AND Id LIKE @Id");
                     }
-                    if (!string.IsNullOrEmpty(aboBloodType))
+                    if (!string.IsNullOrEmpty(aboBloodType) && !string.IsNullOrEmpty(rhesusBloodType))
                     {
-                        queryBuilder.Append(" AND ABOBloodType = @ABOBloodType");
-                    }
-                    if (!string.IsNullOrEmpty(rhesusBloodType))
-                    {
-                        queryBuilder.Append(" AND RhesusBloodType = @RhesusBloodType");
+                        queryBuilder.Append(" AND BloodGroup = @BloodGroup");
                     }
                     if (!string.IsNullOrEmpty(bloodProductType))
                     {
-                        queryBuilder.Append(" AND BloodProductType = @BloodProductType");
+                        queryBuilder.Append(" AND BloodProductType LIKE @BloodProductType");
                     }
                     if (!string.IsNullOrEmpty(volume))
                     {
@@ -355,23 +384,21 @@ namespace NganHangMau2
                         queryBuilder.Append(" AND CONVERT(date, EnteredDate) = @EnteredDate");
                     }
 
+
                     using (SqlCommand command = new SqlCommand(queryBuilder.ToString(), connection))
                     {
                         if (!string.IsNullOrEmpty(id))
                         {
                             command.Parameters.AddWithValue("@Id", "%" + id + "%");
                         }
-                        if (!string.IsNullOrEmpty(aboBloodType))
+                        if (!string.IsNullOrEmpty(aboBloodType) && !string.IsNullOrEmpty(rhesusBloodType))
                         {
-                            command.Parameters.AddWithValue("@ABOBloodType", aboBloodType);
-                        }
-                        if (!string.IsNullOrEmpty(rhesusBloodType))
-                        {
-                            command.Parameters.AddWithValue("@RhesusBloodType", rhesusBloodType);
+                            string fullBloodGroup = aboBloodType + (rhesusBloodType == "Dương tính" ? "+" : "-");
+                            command.Parameters.AddWithValue("@BloodGroup", fullBloodGroup);
                         }
                         if (!string.IsNullOrEmpty(bloodProductType))
                         {
-                            command.Parameters.AddWithValue("@BloodProductType", bloodProductType);
+                            command.Parameters.AddWithValue("@BloodProductType", "%" + bloodProductType + "%");
                         }
                         if (!string.IsNullOrEmpty(volume))
                         {
@@ -401,8 +428,10 @@ namespace NganHangMau2
                                     ProductionDate = Convert.ToDateTime(reader["ProductionDate"]),
                                     ExpiryDate = Convert.ToDateTime(reader["ExpiryDate"]),
                                     BloodProductType = reader["BloodProductType"].ToString(),
+                                    Volume = reader["Volume"].ToString(),
                                     EnteredBy = reader["EnteredBy"].ToString(),
-                                    EnteredDate = Convert.ToDateTime(reader["EnteredDate"])
+                                    EnteredDate = Convert.ToDateTime(reader["EnteredDate"]),
+                                    Status = reader["Status"].ToString()
                                 };
                                 results.Add(bloodBag);
                             }
