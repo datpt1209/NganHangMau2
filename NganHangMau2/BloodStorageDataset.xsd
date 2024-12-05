@@ -21,6 +21,7 @@
               <xs:element name="ExpiryDate" msprop:Generator_ColumnPropNameInTable="ExpiryDateColumn" msprop:Generator_ColumnPropNameInRow="ExpiryDate" msprop:Generator_UserColumnName="ExpiryDate" msprop:Generator_ColumnVarNameInTable="columnExpiryDate" type="xs:string" minOccurs="0" />
               <xs:element name="BloodProductType" msprop:Generator_ColumnPropNameInTable="BloodProductTypeColumn" msprop:Generator_ColumnPropNameInRow="BloodProductType" msprop:Generator_UserColumnName="BloodProductType" msprop:Generator_ColumnVarNameInTable="columnBloodProductType" type="xs:string" minOccurs="0" />
               <xs:element name="EnteredBy" msprop:Generator_ColumnPropNameInTable="EnteredByColumn" msprop:nullValue="_empty" msprop:Generator_ColumnPropNameInRow="EnteredBy" msprop:Generator_UserColumnName="EnteredBy" msprop:Generator_ColumnVarNameInTable="columnEnteredBy" type="xs:string" minOccurs="0" />
+              <xs:element name="RhesusBloodType" msprop:Generator_ColumnPropNameInRow="RhesusBloodType" msprop:Generator_ColumnPropNameInTable="RhesusBloodTypeColumn" msprop:Generator_ColumnVarNameInTable="columnRhesusBloodType" msprop:Generator_UserColumnName="RhesusBloodType" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

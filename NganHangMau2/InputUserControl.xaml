@@ -5,7 +5,55 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <UserControl.Resources>
         <local:IndexConverter x:Key="IndexConverter"/>
+        <ControlTemplate x:Key="ComboBoxWithClearButton" TargetType="ComboBox">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ToggleButton Grid.Column="0"
+                    Name="ToggleButton"
+                    Template="{StaticResource ComboBoxToggleButton}"
+                    Focusable="false"
+                    IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                    ClickMode="Press">
+                    <ToggleButton.Content>
+                        <ContentPresenter />
+                    </ToggleButton.Content>
+                </ToggleButton>
+                <Button Grid.Column="1"
+              Content="X"
+              Width="20"
+              Height="20"
+              Margin="2,0,0,0"
+              VerticalAlignment="Center"
+              HorizontalAlignment="Center"
+             />
+                <Popup Name="Popup"
+             Placement="Bottom"
+             IsOpen="{TemplateBinding IsDropDownOpen}"
+             AllowsTransparency="True"
+             Focusable="False"
+             PopupAnimation="Slide">
+                    <Grid Name="DropDown"
+                SnapsToDevicePixels="True"
+                MinWidth="{TemplateBinding ActualWidth}"
+                MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                        <Border x:Name="DropDownBorder"
+                      Background="{StaticResource WindowBackgroundBrush}"
+                      BorderBrush="{StaticResource SolidBorderBrush}"
+                      BorderThickness="1" />
+                        <ScrollViewer Margin="4,6,4,6"
+                            SnapsToDevicePixels="True">
+                            <StackPanel IsItemsHost="True"
+                              KeyboardNavigation.DirectionalNavigation="Contained" />
+                        </ScrollViewer>
+                    </Grid>
+                </Popup>
+            </Grid>
+        </ControlTemplate>
     </UserControl.Resources>
+
     <Grid>
    
         <materialDesign:Card Margin="5,5,5,5" Padding="10" Grid.ColumnSpan="2">
@@ -53,8 +101,8 @@
                             Margin="5"
                             x:Name="cmbVolume" 
                             materialDesign:HintAssist.Hint="Thể tích"
-                            Width="150" Style="{StaticResource MaterialDesignOutlinedComboBox}">
-
+                            Width="150" Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                           >
                         </ComboBox>
 
                         <DatePicker
@@ -75,7 +123,8 @@
                     <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
                         <Button x:Name="btnAdd" Content="Add" Width="75" Click="btnAdd_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
                         <Button x:Name="btnSave" Content="Save" Width="75" Margin="10,0,0,0" Click="btnSave_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
-                        <Button x:Name="btnPrint" Content="In" Width="75" Margin="10,0,0,0" Click="btnPrint_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                        <Button x:Name="btnPrint" Content="Print" Width="75" Margin="10,0,0,0" Click="btnPrint_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                        <Button x:Name="btnClear" Content="Clear" Width="75" Margin="10,0,0,0" Click="btnClear_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -103,6 +152,7 @@
                         <DataGridTextColumn Header="Ngày hết hạn" Binding="{Binding ExpiryDate, StringFormat=dd/MM/yyyy}" />
                         <DataGridTextColumn Header="Người nhập" Binding="{Binding EnteredBy}" />
                         <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status}" />
+                        <DataGridTextColumn Header="Bảo quản" Binding="{Binding StorageTemperature}" />
 
                     </DataGrid.Columns>
                 </DataGrid>

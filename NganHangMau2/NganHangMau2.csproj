@@ -12,7 +12,7 @@
   <ItemGroup>
     <None Remove="blood-donation.ico" />
     <None Remove="BloodData.json" />
-    <None Remove="BloodStorageReport.rdlc" />
+    <None Remove="BloodStorageReport2.rdlc" />
     <None Remove="SupReport.rdlc" />
   </ItemGroup>
 
@@ -24,6 +24,8 @@
     <PackageReference Include="ReportViewerCore.WinForms" Version="15.1.19" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.10" />
+    <PackageReference Include="ToastNotifications" Version="2.5.1" />
+    <PackageReference Include="ToastNotifications.Messages" Version="2.5.1" />
   </ItemGroup>
 
 	<ItemGroup>
@@ -45,7 +47,7 @@
 	  <EmbeddedResource Include="blood-donation.ico">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </EmbeddedResource>
-	  <EmbeddedResource Include="BloodStorageReport.rdlc">
+	  <EmbeddedResource Include="BloodStorageReport2.rdlc">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </EmbeddedResource>
 	  <EmbeddedResource Include="SupReport.rdlc">

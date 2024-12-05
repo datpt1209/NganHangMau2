@@ -27,10 +27,12 @@ namespace NganHangMau2
         private List<BloodBag> bloodBags = new List<BloodBag>();
         string currentUserName = UserManager.Instance.CurrentUserName;
         string connectionString = AppConfig.GetConnectionString();
+        private ToastNotificationService _tn;
         public InputUserControl()
         {
             InitializeComponent();
             LoadBloodData();
+            _tn = new ToastNotificationService();
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -71,23 +73,23 @@ namespace NganHangMau2
 
             string aboBloodType = cmbABOBloodType.SelectedItem as string ?? string.Empty;
             string rhesusBloodType = cmbRhesusBloodType.SelectedItem as string ?? string.Empty;
-            string bloodGroup = aboBloodType + (rhesusBloodType == "Dương tính" ? "+" : "-");
+            string bloodGroup = aboBloodType + (rhesusBloodType == "Dương tính" ? " +" : " -");
             string bloodProductType = cmbBloodProductType.SelectedItem as string ?? string.Empty;
             string volume = cmbVolume.SelectedItem as string ?? string.Empty;
             string storageTemperature = "2-6°C";
 
-            if (bloodProductType == "Hồng cầu lắng")
+            if (bloodProductType == "Khối hồng cầu")
             {
-                bloodProductType = $"KHỐI HỒNG CẦU TỪ {volume} mL MÁU TOÀN PHẦN";
+                bloodProductType = $"KHỐI HỒNG CẦU TỪ {volume}mL MÁU TOÀN PHẦN";
             }
-            if (bloodProductType == "PFC")
+            if (bloodProductType == "Huyết tương tươi đông lạnh")
             {
-                bloodProductType = $"HUYẾT TƯƠNG TƯƠI ĐÔNG LẠNH {volume} mL";
+                bloodProductType = $"HUYẾT TƯƠNG TƯƠI ĐÔNG LẠNH {volume}mL";
                 storageTemperature = "-30°C";
             }
-            if (bloodProductType == "Tiểu cầu")
+            if (bloodProductType == "Tiểu cầu đậm đặc")
             {
-                bloodProductType = $"TIỂU CẦU ĐẬM ĐẶC {volume} mL";
+                bloodProductType = $"TIỂU CẦU ĐẬM ĐẶC {volume}mL";
                 storageTemperature = "20-25°C lắc liên tục";
             }
 
@@ -95,13 +97,15 @@ namespace NganHangMau2
             {
                 Id = txtId.Text,
                 BloodGroup = bloodGroup,
-                RhesusBloodType = rhesusBloodType,
+                ABO_Group = aboBloodType,
+                Rhesus_Group = rhesusBloodType == "Dương tính" ? "+" : "-",
                 Volume = volume,
+                VolumeNum = int.Parse(volume.Substring(0,3)),
                 ProductionDate = dtpProductionDate.SelectedDate ?? DateTime.Now,
                 ExpiryDate = dtpExpiryDate.SelectedDate ?? DateTime.Now,
                 BloodProductType = bloodProductType,
                 EnteredBy = currentUserName, 
-                EnteredDate = DateTime.Now,
+                EnteredDate = DateTime.Now.Date,
                 StorageTemperature = storageTemperature,
                 Status = "Available"
             };
@@ -139,18 +143,20 @@ namespace NganHangMau2
                         {
                             foreach (var bloodBag in bloodBags.ToList())
                             {
-                                string query = "INSERT INTO BloodBags (Id, BloodGroup, RhesusBloodType, ProductionDate, ExpiryDate, BloodProductType, Volume, StorageTemperature, EnteredBy, EnteredDate, Status) " +
-                                               "VALUES (@Id, @BloodGroup, @RhesusBloodType, @ProductionDate, @ExpiryDate, @BloodProductType, @Volume, @StorageTemperature, @EnteredBy, @EnteredDate, @Status)";
+                                string query = "INSERT INTO BloodBags (Id, BloodGroup, ABO_Group, Rhesus_Group, ProductionDate, ExpiryDate, BloodProductType, Volume, VolumeNum, StorageTemperature, EnteredBy, EnteredDate, Status) " +
+                                               "VALUES (@Id, @BloodGroup, @ABO_Group, @Rhesus_Group, @ProductionDate, @ExpiryDate, @BloodProductType, @Volume, @VolumeNum, @StorageTemperature, @EnteredBy, @EnteredDate, @Status)";
 
                                 using (SqlCommand command = new SqlCommand(query, connection, transaction))
                                 {
                                     command.Parameters.AddWithValue("@Id", bloodBag.Id);
                                     command.Parameters.AddWithValue("@BloodGroup", bloodBag.BloodGroup);
-                                    command.Parameters.AddWithValue("@RhesusBloodType", bloodBag.RhesusBloodType);
+                                    command.Parameters.AddWithValue("@ABO_Group", bloodBag.ABO_Group);
+                                    command.Parameters.AddWithValue("@Rhesus_Group", bloodBag.Rhesus_Group);
                                     command.Parameters.AddWithValue("@ProductionDate", bloodBag.ProductionDate);
                                     command.Parameters.AddWithValue("@ExpiryDate", bloodBag.ExpiryDate);
                                     command.Parameters.AddWithValue("@BloodProductType", bloodBag.BloodProductType);
                                     command.Parameters.AddWithValue("@Volume", bloodBag.Volume);
+                                    command.Parameters.AddWithValue("@VolumeNum", bloodBag.VolumeNum);
                                     command.Parameters.AddWithValue("@StorageTemperature", bloodBag.StorageTemperature);
                                     command.Parameters.AddWithValue("@EnteredBy", bloodBag.EnteredBy);
                                     command.Parameters.AddWithValue("@EnteredDate", bloodBag.EnteredDate);
@@ -161,7 +167,7 @@ namespace NganHangMau2
                             }
 
                             transaction.Commit();
-                            MessageBox.Show("Blood bags saved successfully!");
+                            ToastNotificationService.ShowSuccess("Blood bags saved successfully!");
                             PrintBloodBagReport();
 
                             // Reset the list and clear the text boxes
@@ -218,15 +224,17 @@ namespace NganHangMau2
             {
                 bloodBag.Id = parts[0].Trim();
                 bloodBag.BloodGroup = parts[1].Trim();
-                bloodBag.RhesusBloodType = parts[1].Trim().Split(' ').Length > 1 ?
-                                            (parts[1].Trim().Split(' ')[1] == "+" ? "Dương tính" : "Âm tính") : string.Empty;
+                bloodBag.ABO_Group = parts[1].Trim().Split(' ').Length > 1 ? (parts[1].Trim().Split(' ')[0]) : string.Empty;
+                bloodBag.Rhesus_Group = parts[1].Trim().Split(' ').Length > 1 ? (parts[1].Trim().Split(' ')[1]) : string.Empty;
                 bloodBag.ProductionDate = DateTime.Parse(parts[3]);
                 bloodBag.ExpiryDate = DateTime.Parse(parts[4]);
                 bloodBag.EnteredBy = currentUserName;
                 bloodBag.BloodProductType = parts[6].Trim();
                 bloodBag.Volume = ExtractVolume(parts[6].Trim());
+                bloodBag.VolumeNum = int.Parse(bloodBag.Volume.Substring(0, 3));
                 bloodBag.StorageTemperature = parts[7].Trim();
                 bloodBag.Status = "Available";
+                bloodBag.EnteredDate = DateTime.Now.Date;
             }
 
             return bloodBag;
@@ -235,10 +243,10 @@ namespace NganHangMau2
         private string ExtractVolume(string bloodProductType)
         {
             // Biểu thức chính quy để tìm thể tích (số theo sau bởi "mL" hoặc "ml")
-            var match = System.Text.RegularExpressions.Regex.Match(bloodProductType, @"(\d+)\s?mL", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            var match = System.Text.RegularExpressions.Regex.Match(bloodProductType, @"(\d+)\s?ml", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             if (match.Success)
             {
-                return match.Groups[1].Value + " mL";
+                return match.Groups[1].Value + "ml";
             }
             return string.Empty;
         }
@@ -336,6 +344,11 @@ namespace NganHangMau2
             textBox.Clear();
             textBox.Focus();
             textBox.CaretIndex = textBox.Text.Length;
+        }
+
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            ClearInputFields();
         }
     }
 }

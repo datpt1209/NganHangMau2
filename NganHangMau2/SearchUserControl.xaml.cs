@@ -169,6 +169,7 @@ namespace NganHangMau2
             cmbVolume.SelectedIndex = -1;
             dtpProductionDate.SelectedDate = null;
             dtpExpiryDate.SelectedDate = null;
+            cmbStatus.SelectedIndex = -1;
         }
 
         private BloodBag ParseBloodBag(string data)
@@ -218,6 +219,7 @@ namespace NganHangMau2
                 cmbRhesusBloodType.ItemsSource = bloodData.RhesusBloodTypes;
                 cmbBloodProductType.ItemsSource = bloodData.BloodProductTypes;
                 cmbVolume.ItemsSource = bloodData.Volumes;
+                cmbStatus.ItemsSource = bloodData.Statuses;
             }
             else
             {
@@ -283,9 +285,10 @@ namespace NganHangMau2
             DateTime? productionDate = dtpProductionDate.SelectedDate;
             DateTime? expiryDate = dtpExpiryDate.SelectedDate;
             DateTime? inputDate = dtinputDate.SelectedDate;
+            string status = cmbStatus.Text;
 
             // Thực hiện truy vấn cơ sở dữ liệu với các điều kiện tìm kiếm
-            var results = SearchBloodBags(id, aboBloodType, rhesusBloodType, bloodProductType, volume, productionDate, expiryDate, inputDate);
+            var results = SearchBloodBags(id, aboBloodType, rhesusBloodType, bloodProductType, volume, productionDate, expiryDate, inputDate, status);
 
             // Cập nhật DataGrid với kết quả tìm kiếm
             bloodBags.Clear();
@@ -343,7 +346,7 @@ namespace NganHangMau2
         }
 
 
-        private List<BloodBag> SearchBloodBags(string id, string aboBloodType, string rhesusBloodType, string bloodProductType, string volume, DateTime? productionDate, DateTime? expiryDate, DateTime? inputDate)
+        private List<BloodBag> SearchBloodBags(string id, string aboBloodType, string rhesusBloodType, string bloodProductType, string volume, DateTime? productionDate, DateTime? expiryDate, DateTime? inputDate, string status)
         {
             List<BloodBag> results = new List<BloodBag>();
 
@@ -359,10 +362,16 @@ namespace NganHangMau2
                     {
                         queryBuilder.Append(" AND Id LIKE @Id");
                     }
-                    if (!string.IsNullOrEmpty(aboBloodType) && !string.IsNullOrEmpty(rhesusBloodType))
+                    if (!string.IsNullOrEmpty(aboBloodType))
                     {
-                        queryBuilder.Append(" AND BloodGroup = @BloodGroup");
+                        queryBuilder.Append(" AND ABO_Group = @ABO_Group");
                     }
+
+                    if (!string.IsNullOrEmpty(rhesusBloodType))
+                    {
+                        queryBuilder.Append(" AND Rhesus_Group = @Rhesus_Group");
+                    }
+
                     if (!string.IsNullOrEmpty(bloodProductType))
                     {
                         queryBuilder.Append(" AND BloodProductType LIKE @BloodProductType");
@@ -373,17 +382,20 @@ namespace NganHangMau2
                     }
                     if (productionDate.HasValue)
                     {
-                        queryBuilder.Append(" AND CONVERT(date, ProductionDate) = @ProductionDate");
+                        queryBuilder.Append(" AND CONVERT(date, ProductionDate) >= @ProductionDate");
                     }
                     if (expiryDate.HasValue)
                     {
-                        queryBuilder.Append(" AND CONVERT(date, ExpiryDate) = @ExpiryDate");
+                        queryBuilder.Append(" AND CONVERT(date, ExpiryDate) <= @ExpiryDate");
                     }
                     if (inputDate.HasValue)
                     {
-                        queryBuilder.Append(" AND CONVERT(date, EnteredDate) = @EnteredDate");
+                        queryBuilder.Append(" AND EnteredDate = @EnteredDate");
                     }
-
+                    if (!string.IsNullOrEmpty(status))
+                    {
+                        queryBuilder.Append(" AND Status = @Status");
+                    }
 
                     using (SqlCommand command = new SqlCommand(queryBuilder.ToString(), connection))
                     {
@@ -391,11 +403,19 @@ namespace NganHangMau2
                         {
                             command.Parameters.AddWithValue("@Id", "%" + id + "%");
                         }
-                        if (!string.IsNullOrEmpty(aboBloodType) && !string.IsNullOrEmpty(rhesusBloodType))
+                        if (!string.IsNullOrEmpty(aboBloodType))
                         {
-                            string fullBloodGroup = aboBloodType + (rhesusBloodType == "Dương tính" ? "+" : "-");
-                            command.Parameters.AddWithValue("@BloodGroup", fullBloodGroup);
+
+                            command.Parameters.AddWithValue("@ABO_Group", aboBloodType);
+
                         }
+                        if (!string.IsNullOrEmpty(rhesusBloodType))
+
+                        {
+                                string convert_Rhesus = rhesusBloodType == "Dương tính" ? "+" : "-";
+                                command.Parameters.AddWithValue("@Rhesus_Group", convert_Rhesus);
+                        }
+                      
                         if (!string.IsNullOrEmpty(bloodProductType))
                         {
                             command.Parameters.AddWithValue("@BloodProductType", "%" + bloodProductType + "%");
@@ -415,6 +435,12 @@ namespace NganHangMau2
                         if (inputDate.HasValue)
                         {
                             command.Parameters.AddWithValue("@EnteredDate", inputDate.Value.Date);
+                        }
+                        if (!string.IsNullOrEmpty(status))
+
+                        {
+                            string convert_Status = status == "Chưa xuất" ? "Available" : "Exported";
+                            command.Parameters.AddWithValue("@Status", convert_Status);
                         }
 
                         using (SqlDataReader reader = command.ExecuteReader())
@@ -451,6 +477,16 @@ namespace NganHangMau2
             return results;
         }
 
-
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            bloodBags.Clear();
+            txtId.Clear();
+            cmbABOBloodType.SelectedIndex = -1;
+            cmbRhesusBloodType.SelectedIndex = -1;
+            cmbBloodProductType.SelectedIndex = -1;
+            cmbVolume.SelectedIndex = -1;
+            dtpProductionDate.SelectedDate = null;
+            dtpExpiryDate.SelectedDate = null;
+        }
     }
 }

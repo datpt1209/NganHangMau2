@@ -291,6 +291,8 @@ namespace NganHangMau2 {
             
             private global::System.Data.DataColumn columnEnteredBy;
             
+            private global::System.Data.DataColumn columnRhesusBloodType;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public BloodBagDataTable() {
@@ -374,6 +376,14 @@ namespace NganHangMau2 {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn RhesusBloodTypeColumn {
+                get {
+                    return this.columnRhesusBloodType;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -409,7 +419,7 @@ namespace NganHangMau2 {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public BloodBagRow AddBloodBagRow(string Id, string BloodGroup, string ProductionDate, string ExpiryDate, string BloodProductType, string EnteredBy) {
+            public BloodBagRow AddBloodBagRow(string Id, string BloodGroup, string ProductionDate, string ExpiryDate, string BloodProductType, string EnteredBy, string RhesusBloodType) {
                 BloodBagRow rowBloodBagRow = ((BloodBagRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Id,
@@ -417,7 +427,8 @@ namespace NganHangMau2 {
                         ProductionDate,
                         ExpiryDate,
                         BloodProductType,
-                        EnteredBy};
+                        EnteredBy,
+                        RhesusBloodType};
                 rowBloodBagRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowBloodBagRow);
                 return rowBloodBagRow;
@@ -446,6 +457,7 @@ namespace NganHangMau2 {
                 this.columnExpiryDate = base.Columns["ExpiryDate"];
                 this.columnBloodProductType = base.Columns["BloodProductType"];
                 this.columnEnteredBy = base.Columns["EnteredBy"];
+                this.columnRhesusBloodType = base.Columns["RhesusBloodType"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -463,6 +475,8 @@ namespace NganHangMau2 {
                 base.Columns.Add(this.columnBloodProductType);
                 this.columnEnteredBy = new global::System.Data.DataColumn("EnteredBy", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnEnteredBy);
+                this.columnRhesusBloodType = new global::System.Data.DataColumn("RhesusBloodType", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnRhesusBloodType);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -701,6 +715,22 @@ namespace NganHangMau2 {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string RhesusBloodType {
+                get {
+                    try {
+                        return ((string)(this[this.tableBloodBag.RhesusBloodTypeColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'RhesusBloodType\' in table \'BloodBag\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableBloodBag.RhesusBloodTypeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public bool IsIdNull() {
                 return this.IsNull(this.tableBloodBag.IdColumn);
             }
@@ -769,6 +799,18 @@ namespace NganHangMau2 {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetEnteredByNull() {
                 this[this.tableBloodBag.EnteredByColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsRhesusBloodTypeNull() {
+                return this.IsNull(this.tableBloodBag.RhesusBloodTypeColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetRhesusBloodTypeNull() {
+                this[this.tableBloodBag.RhesusBloodTypeColumn] = global::System.Convert.DBNull;
             }
         }
         

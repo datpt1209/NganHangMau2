@@ -20,6 +20,41 @@ namespace NganHangMau2
             this.bloodBags = bloodBags;
         }
 
+        //private void Window_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    // Group data by BloodGroup
+        //    groupedData = bloodBags
+        //        .GroupBy(b => b.BloodGroup)
+        //        .ToDictionary(g => g.Key, g => g.Select(b => new SubReportData
+        //        {
+        //            BloodGroup = b.BloodGroup,
+        //            Id = b.Id,
+        //            ExpiryDate = b.ExpiryDate,
+        //            ProductionDate = b.ProductionDate,
+        //            BloodProductType = b.BloodProductType,
+        //            EnteredBy = b.EnteredBy
+        //        }).ToList());
+
+        //    // Create a list of unique blood groups for the main report
+        //    var reportSource = groupedData.Keys.Select(bloodGroup => new { BloodGroup = bloodGroup }).ToList();
+        //    reportViewer.LocalReport.ReportEmbeddedResource = "NganHangMau2.BloodStorageReport.rdlc";
+
+        //    ReportDataSource rds = new ReportDataSource();
+        //    rds.Name = "DataSet1";
+        //    rds.Value = reportSource;
+        //    reportViewer.LocalReport.DataSources.Clear();
+        //    reportViewer.LocalReport.DataSources.Add(rds);
+
+        //    // Add SubreportProcessing event handler
+        //    reportViewer.LocalReport.SubreportProcessing += new SubreportProcessingEventHandler(LocalReport_SubreportProcessing);
+
+
+        //    // Set display mode to Print Preview
+        //    reportViewer.SetDisplayMode(DisplayMode.PrintLayout);
+
+
+        //    reportViewer.RefreshReport();
+        //}
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             // Group data by BloodGroup
@@ -37,11 +72,11 @@ namespace NganHangMau2
 
             // Create a list of unique blood groups for the main report
             var reportSource = groupedData.Keys.Select(bloodGroup => new { BloodGroup = bloodGroup }).ToList();
-            reportViewer.LocalReport.ReportEmbeddedResource = "NganHangMau2.BloodStorageReport.rdlc";
+            reportViewer.LocalReport.ReportEmbeddedResource = "NganHangMau2.BloodStorageReport2.rdlc";
 
             ReportDataSource rds = new ReportDataSource();
             rds.Name = "DataSet1";
-            rds.Value = reportSource;
+            rds.Value = bloodBags;
             reportViewer.LocalReport.DataSources.Clear();
             reportViewer.LocalReport.DataSources.Add(rds);
 

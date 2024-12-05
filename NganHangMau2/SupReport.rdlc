@@ -41,6 +41,10 @@
           <DataField>EnteredBy</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="RhesusBloodType">
+          <DataField>RhesusBloodType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>BloodStorageDataset</rd:DataSetName>
@@ -108,21 +112,19 @@
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
-								  <TextRun>
-									  <Value>=Left(Fields!Id.Value, Len(Fields!Id.Value) - 8)</Value>
-									  <Style>
-										  <FontFamily>Arial</FontFamily>
-										  <FontSize>12pt</FontSize>
-									  </Style>
-								  </TextRun>
-								  <TextRun>
-									  <Value>=Right(Fields!Id.Value, 8)</Value>
-									  <Style>
-										  <FontFamily>Arial</FontFamily>
-										  <FontSize>14pt</FontSize>
-										  <FontWeight>Bold</FontWeight>
-									  </Style>
-								  </TextRun>
+                                <TextRun>
+                                  <Value>=Left(Fields!Id.Value, Len(Fields!Id.Value) - 8)</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                                <TextRun>
+                                  <Value>=Right(Fields!Id.Value, 8)</Value>
+                                  <Style>
+                                    <FontSize>14pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
                               </TextRuns>
                               <Style>
                                 <TextAlign>Center</TextAlign>
@@ -1592,6 +1594,12 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
+    <ReportParameter Name="RhesusBloodType">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
@@ -1622,6 +1630,11 @@
           <ColumnIndex>1</ColumnIndex>
           <RowIndex>2</RowIndex>
           <ParameterName>BloodProductType</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>2</ColumnIndex>
+          <RowIndex>2</RowIndex>
+          <ParameterName>RhesusBloodType</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>

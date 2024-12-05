@@ -24,9 +24,12 @@ namespace NganHangMau2
         private List<BloodBag> bloodBagsToExport = new List<BloodBag>();
         string currentUserName = UserManager.Instance.CurrentUserName;
         string connectionString = AppConfig.GetConnectionString();
+        private ToastNotificationService _tn;
         public OutputUserControl()
         {
             InitializeComponent();
+            _tn = new ToastNotificationService();
+            Unloaded += OnUnload;
         }
 
         private void btnExport_Click(object sender, RoutedEventArgs e)
@@ -34,11 +37,16 @@ namespace NganHangMau2
             foreach (var bloodBag in bloodBagsToExport)
             {
                 UpdateBloodBagStatus(bloodBag.Id, "Exported");
+                InsertExportedBloodBag(bloodBag.Id, currentUserName, DateTime.Now);
             }
 
             MessageBox.Show("Blood bags exported successfully!");
             bloodBagsToExport.Clear();
             UpdateBloodBagList();
+        }
+        private void OnUnload(object sender, RoutedEventArgs e)
+        {
+            _tn.OnUnloaded();
         }
         private void txtId_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -63,7 +71,14 @@ namespace NganHangMau2
                         {
                             string decodedData = Encoding.UTF8.GetString(Convert.FromBase64String(scannedData));
                             BloodBag bloodBag = ParseBloodBag(decodedData);
-                            autoExport(bloodBag.Id);
+                            if (BloodBagExists(bloodBag.Id))
+                            {
+                                autoExport(bloodBag.Id);
+                            }else
+                            {
+                                MessageBox.Show("Blood bag not found.");
+                            }
+                            
                             ClearTxtId(textBox);
                         }
                         catch (System.FormatException ex)
@@ -73,6 +88,29 @@ namespace NganHangMau2
 
                         ClearTxtId(textBox);
                     }
+                }
+            }
+        }
+        public bool BloodBagExists(string bloodBagID)
+        {
+
+            string query = "SELECT COUNT(1) FROM BloodBags WHERE Id = @BloodBagID";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@BloodBagID", bloodBagID);
+
+                try
+                {
+                    connection.Open();
+                    int count = (int)command.ExecuteScalar();
+                    return count > 0;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("An error occurred: " + ex.Message);
+                    return false;
                 }
             }
         }
@@ -142,6 +180,7 @@ namespace NganHangMau2
 
                         command.ExecuteNonQuery();
                     }
+                    ToastNotificationService.ShowSuccess("Blood bag exported successfully!");
                 }
             }
             catch (SqlException ex)
@@ -151,6 +190,31 @@ namespace NganHangMau2
             catch (Exception ex)
             {
                 MessageBox.Show($"An unexpected error occurred: {ex.Message}");
+            }
+        }
+
+        public void InsertExportedBloodBag(string bloodBagID, string exportedBy, DateTime exportedDate)
+        {
+            string query = "INSERT INTO ExportedBloodBags (BloodBagID, ExportedBy, ExportedDate) " +
+                           "VALUES (@BloodBagID, @ExportedBy, @ExportedDate)";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@BloodBagID", bloodBagID);
+                command.Parameters.AddWithValue("@ExportedBy", exportedBy);
+                command.Parameters.AddWithValue("@ExportedDate", exportedDate);
+             
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    ToastNotificationService.ShowSuccess("Insert Blood bag exported successfully!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("An error occurred: " + ex.Message);
+                }
             }
         }
 
@@ -224,16 +288,14 @@ namespace NganHangMau2
                 if (bloodBag.Status != "Exported")
                 {
                     UpdateBloodBagStatus(bloodBag.Id, "Exported");
+                    InsertExportedBloodBag(bloodBag.Id, currentUserName, DateTime.Now);
                 }
                 else
                 {
                     MessageBox.Show("Blood bag has already been exported.");
                 }
             }
-            else
-            {
-                MessageBox.Show("Blood bag not found.");
-            }
+           
         }
     }
 }

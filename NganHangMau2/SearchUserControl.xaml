@@ -11,7 +11,7 @@
         <local:IndexConverter x:Key="IndexConverter"/>
     </UserControl.Resources>
     <Grid>
-        <materialDesign:Card Margin="1" Padding="10" Grid.ColumnSpan="2">
+        <materialDesign:Card Margin="5" Padding="10" Grid.ColumnSpan="2">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -44,8 +44,6 @@
 
                     <!-- StackPanel for ABO and Rhesus Blood Type on the same row -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-
-                     
                         <ComboBox
                             Background="AntiqueWhite"
                             Margin="5"
@@ -92,11 +90,23 @@
                             materialDesign:HintAssist.Hint="Hạn sử dụng"
                             materialDesign:TextFieldAssist.HasClearButton="True"   
                             Style="{StaticResource MaterialDesignOutlinedDatePicker}" Height="50" />
+
+                        <ComboBox
+                            Background="AntiqueWhite"
+                            Margin="5"
+                            Width="150"
+                            x:Name="cmbStatus" 
+                            materialDesign:HintAssist.Hint="Trạng thái"
+                            Style="{StaticResource MaterialDesignOutlinedComboBox}">
+
+                        </ComboBox>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
                         <Button x:Name="btnSearch" Content="Search" Width="75" Click="btnSearch_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
-                        <Button x:Name="btnPrint" Content="In" Width="75" Margin="10,0,0,0" Click="btnPrint_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                        <Button x:Name="btnPrint" Content="Print" Width="75" Margin="10,0,0,0" Click="btnPrint_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
+                        <Button x:Name="btnClear" Content="Clear" Width="75" Margin="10,0,0,0" Click="btnClear_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
+
                     </StackPanel>
                 </StackPanel>
 

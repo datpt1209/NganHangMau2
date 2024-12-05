@@ -106,7 +106,7 @@
             HorizontalAlignment="Left" Margin="0,0,0,0">
 
                         <StackPanel Orientation="Horizontal" Width="170">
-                            <materialDesign:PackIcon Kind="PencilBoxMultiple" Margin="5,0,0,0"
+                            <materialDesign:PackIcon Kind="Import" Margin="5,0,0,0"
                                          Height="30" Width="30" />
                             <TextBlock Text="Nhap" Margin="0,0,0,0">
                                 <TextBlock.Style>
@@ -132,7 +132,7 @@
                        >
 
                         <StackPanel Orientation="Horizontal" Width="170">
-                            <materialDesign:PackIcon Kind="HomeOutline" Margin="5,0,0,0"
+                            <materialDesign:PackIcon Kind="Export" Margin="5,0,0,0"
                                Height="30" Width="30" />
                             <TextBlock Text="Xuất" Margin="0,0,0,0">
                                 <TextBlock.Style>

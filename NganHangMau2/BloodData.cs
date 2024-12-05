@@ -12,5 +12,6 @@ namespace NganHangMau2
         public List<string> RhesusBloodTypes { get; set; }
         public List<string> BloodProductTypes { get; set; }
         public List<string> Volumes { get; set; }
+        public List<string> Statuses { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 {
   "ABOBloodTypes": [ "A", "B", "AB", "O" ],
   "RhesusBloodTypes": [ "Dương tính", "Âm tính" ],
-  "BloodProductTypes": [ "Hồng cầu lắng", "PFC", "Tiểu cầu" ],
-  "Volumes": [ "250", "350", "450" ]
+  "BloodProductTypes": [ "Khối hồng cầu", "Huyết tương tươi đông lạnh", "Tiểu cầu đậm đặc" ],
+  "Volumes": [ "250ml", "350ml", "450ml" ],
+  "Statuses": [ "Chưa xuất", "Đã xuất" ]
 }
