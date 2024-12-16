@@ -215,6 +215,20 @@ namespace NganHangMau2
                         command.ExecuteNonQuery();
                     }
                     ToastNotificationService.ShowSuccess("Blood bag exported successfully!");
+                    ClearTxtId(txtId);
+                    txtId.Clear();
+                    txtId.Focus();
+                    lblExportedBy.Text = exportedBy;
+                    lblExportedDate.Text = exportedDate.ToString("dd/MM/yyyy");
+                    txtPatientId.Text = patientName;
+                    stExportedBy.Visibility = Visibility.Visible;
+                    stExportedDate.Visibility = Visibility.Visible;
+
+                    // Disable editing
+                    txtPatientId.IsEnabled = false;
+                    btnSave.Visibility = Visibility.Hidden;
+
+
                 }
             }
             catch (SqlException ex)
