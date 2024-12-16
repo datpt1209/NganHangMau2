@@ -80,16 +80,16 @@ namespace NganHangMau2
 
             if (bloodProductType == "Khối hồng cầu")
             {
-                bloodProductType = $"KHỐI HỒNG CẦU TỪ {volume}mL MÁU TOÀN PHẦN";
+                bloodProductType = $"KHỐI HỒNG CẦU TỪ {volume} MÁU TOÀN PHẦN";
             }
             if (bloodProductType == "Huyết tương tươi đông lạnh")
             {
-                bloodProductType = $"HUYẾT TƯƠNG TƯƠI ĐÔNG LẠNH {volume}mL";
+                bloodProductType = $"HUYẾT TƯƠNG TƯƠI ĐÔNG LẠNH {volume}";
                 storageTemperature = "-30°C";
             }
             if (bloodProductType == "Tiểu cầu đậm đặc")
             {
-                bloodProductType = $"TIỂU CẦU ĐẬM ĐẶC {volume}mL";
+                bloodProductType = $"TIỂU CẦU ĐẬM ĐẶC {volume}";
                 storageTemperature = "20-25°C lắc liên tục";
             }
 
@@ -176,12 +176,20 @@ namespace NganHangMau2
                         }
                         catch (SqlException ex)
                         {
-                            transaction.Rollback();
+                            if (transaction.Connection != null)
+                            {
+                                transaction.Rollback();
+                            }
+                            LogError(ex); // Log detailed error information
                             MessageBox.Show($"An error occurred while saving blood bags to the database: {ex.Message}");
                         }
                         catch (Exception ex)
                         {
-                            transaction.Rollback();
+                            if (transaction.Connection != null)
+                            {
+                                transaction.Rollback();
+                            }
+                            LogError(ex); // Log detailed error information
                             MessageBox.Show($"An unexpected error occurred: {ex.Message}");
                         }
                     }
@@ -189,12 +197,20 @@ namespace NganHangMau2
             }
             catch (SqlException ex)
             {
+                LogError(ex); // Log detailed error information
                 MessageBox.Show($"An error occurred while connecting to the database: {ex.Message}");
             }
             catch (Exception ex)
             {
+                LogError(ex); // Log detailed error information
                 MessageBox.Show($"An unexpected error occurred: {ex.Message}");
             }
+        }
+        private void LogError(Exception ex)
+        {
+            // Log the error details to a file or other logging mechanism
+            string logFilePath = "error_log.txt";
+            File.AppendAllText(logFilePath, $"{DateTime.Now}: {ex.ToString()}{Environment.NewLine}");
         }
 
         private void ClearInputFields()
@@ -293,7 +309,7 @@ namespace NganHangMau2
         }
 
         private void txtId_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
+       {
             if (e.Key == Key.Enter)
             {
                 if (string.IsNullOrEmpty(txtId.Text) || txtId.Text.Length <= 18)
@@ -349,6 +365,11 @@ namespace NganHangMau2
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
             ClearInputFields();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtId.Focus();
         }
     }
 }

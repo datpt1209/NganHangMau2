@@ -110,7 +110,11 @@
                     </StackPanel>
                 </StackPanel>
 
-                <DataGrid Grid.Row="1" x:Name="dgvBloodBags" AutoGenerateColumns="False" VerticalScrollBarVisibility="Auto" IsReadOnly="True">
+                <DataGrid Grid.Row="1" x:Name="dgvBloodBags"
+                          AutoGenerateColumns="False" 
+                          VerticalScrollBarVisibility="Auto"
+                          IsReadOnly="True"
+                          VirtualizingStackPanel.IsVirtualizing="False">
                     <DataGrid.Columns>
                         <!-- Column for row number -->
                         <DataGridTemplateColumn Header="STT">
@@ -120,6 +124,7 @@
                                         <TextBlock.Text>
                                             <MultiBinding Converter="{StaticResource IndexConverter}">
                                                 <Binding RelativeSource="{RelativeSource AncestorType={x:Type DataGridRow}}"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type DataGrid}}" />
                                             </MultiBinding>
                                         </TextBlock.Text>
                                     </TextBlock>

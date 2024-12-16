@@ -14,22 +14,48 @@ namespace NganHangMau2
 
         static ToastNotificationService()
         {
+            InitializeNotifier();
+        }
+
+        private static void InitializeNotifier()
+        {
+            var parentWindow = Application.Current.Windows.OfType<MainWindow>().FirstOrDefault();  // Ensure this is not null
+            if (parentWindow == null)
+            {
+                throw new InvalidOperationException("Parent window is not set.");
+            }
+
             _notifier = new Notifier(cfg =>
             {
                 cfg.PositionProvider = new WindowPositionProvider(
-                    parentWindow: Application.Current.MainWindow,
-                    corner: Corner.TopRight,
-                    offsetX: 10,
-                    offsetY: 10);
+                    parentWindow,
+                    Corner.TopRight,
+                    10, 10);
 
                 cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                    notificationLifetime: TimeSpan.FromSeconds(5),
-                    maximumNotificationCount: MaximumNotificationCount.FromCount(5));
+                    TimeSpan.FromSeconds(3), MaximumNotificationCount.FromCount(5));
 
                 cfg.Dispatcher = Application.Current.Dispatcher;
             });
-            _notifier.ClearMessages(new ClearAll());
         }
+        //static ToastNotificationService()
+        //{
+        //    _notifier = new Notifier(cfg =>
+        //    {
+        //        cfg.PositionProvider = new WindowPositionProvider(
+        //            parentWindow: Application.Current.MainWindow,
+        //            corner: Corner.TopRight,
+        //            offsetX: 10,
+        //            offsetY: 10);
+
+        //        cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+        //            notificationLifetime: TimeSpan.FromSeconds(5),
+        //            maximumNotificationCount: MaximumNotificationCount.FromCount(5));
+
+        //        cfg.Dispatcher = Application.Current.Dispatcher;
+        //    });
+        //    _notifier.ClearMessages(new ClearAll());
+        //}
 
         public static void ShowSuccess(string message)
         {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,10 +22,11 @@ namespace NganHangMau2
     /// </summary>
     public partial class OutputUserControl : UserControl
     {
-        private List<BloodBag> bloodBagsToExport = new List<BloodBag>();
         string currentUserName = UserManager.Instance.CurrentUserName;
         string connectionString = AppConfig.GetConnectionString();
         private ToastNotificationService _tn;
+        BloodBag currentBloodBag = null;
+
         public OutputUserControl()
         {
             InitializeComponent();
@@ -32,22 +34,11 @@ namespace NganHangMau2
             Unloaded += OnUnload;
         }
 
-        private void btnExport_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (var bloodBag in bloodBagsToExport)
-            {
-                UpdateBloodBagStatus(bloodBag.Id, "Exported");
-                InsertExportedBloodBag(bloodBag.Id, currentUserName, DateTime.Now);
-            }
-
-            MessageBox.Show("Blood bags exported successfully!");
-            bloodBagsToExport.Clear();
-            UpdateBloodBagList();
-        }
         private void OnUnload(object sender, RoutedEventArgs e)
         {
             _tn.OnUnloaded();
         }
+
         private void txtId_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -56,65 +47,87 @@ namespace NganHangMau2
                 {
                     return;
                 }
-                else
+
+                e.Handled = true; // Prevent the tab key from moving focus to the next control
+                TextBox textBox = sender as TextBox;
+                if (textBox != null)
                 {
-                    e.Handled = true; // Prevent the tab key from moving focus to the next control
-                    TextBox textBox = sender as TextBox;
-                    if (textBox != null)
+                    string scannedData = textBox.Text.Trim();
+                    scannedData = scannedData.Replace("\t", ""); // Remove tab characters from the scanned data
+
+                    try
                     {
-                        string scannedData = textBox.Text.Trim();
-
-                        // Remove tab characters from the scanned data
-                        scannedData = scannedData.Replace("\t", "");
-
-                        try
+                        string decodedData = Encoding.UTF8.GetString(Convert.FromBase64String(scannedData));
+                        BloodBag bloodBag = ParseBloodBag(decodedData);
+                        var bloodBagFromDb = SearchBloodBagById(bloodBag.Id);
+                        if (bloodBagFromDb != null && bloodBagFromDb.Status == "Available")
                         {
-                            string decodedData = Encoding.UTF8.GetString(Convert.FromBase64String(scannedData));
-                            BloodBag bloodBag = ParseBloodBag(decodedData);
-                            if (BloodBagExists(bloodBag.Id))
-                            {
-                                autoExport(bloodBag.Id);
-                            }else
-                            {
-                                MessageBox.Show("Blood bag not found.");
-                            }
-                            
-                            ClearTxtId(textBox);
+                            currentBloodBag = bloodBagFromDb;
+                            DisplayBloodBagInfo(bloodBagFromDb);
                         }
-                        catch (System.FormatException ex)
+                        else
                         {
-                            MessageBox.Show("Invalid QR code data: " + ex.Message);
+                            MessageBox.Show("Blood bag not found or not available.");
                         }
 
                         ClearTxtId(textBox);
                     }
+                    catch (FormatException ex)
+                    {
+                        MessageBox.Show("Invalid QR code data: " + ex.Message);
+                    }
+
+                    ClearTxtId(textBox);
                 }
             }
         }
-        public bool BloodBagExists(string bloodBagID)
+
+        private void DisplayBloodBagInfo(BloodBag bloodBag)
         {
+            // Show blood bag info card
+            bloodBagInfoCard.Visibility = Visibility.Visible;
 
-            string query = "SELECT COUNT(1) FROM BloodBags WHERE Id = @BloodBagID";
+            // Populate blood bag info
+            lblBloodGroup.Text = bloodBag.BloodGroup;
+            lblBloodProductType.Text = bloodBag.BloodProductType;
+            lblProductionDate.Text = bloodBag.ProductionDate.ToString("dd/MM/yyyy");
+            lblExpiryDate.Text = bloodBag.ExpiryDate.ToString("dd/MM/yyyy");
+            lblEnteredDate.Text = bloodBag.EnteredDate.ToString("dd/MM/yyyy");
+            lblEnteredBy.Text = bloodBag.EnteredBy;
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            if (bloodBag.Status == "Exported")
             {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@BloodBagID", bloodBagID);
+               
+                txtId.Clear();
+                txtId.Focus();
+                lblExportedBy.Text = bloodBag.ExportedBy;
+                lblExportedDate.Text = bloodBag.ExportedDate.ToString("dd/MM/yyyy");
+                txtPatientId.Text = bloodBag.ExportedTo;
+                stExportedBy.Visibility = Visibility.Visible;
+                stExportedDate.Visibility = Visibility.Visible;
 
-                try
-                {
-                    connection.Open();
-                    int count = (int)command.ExecuteScalar();
-                    return count > 0;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("An error occurred: " + ex.Message);
-                    return false;
-                }
+                // Disable editing
+                txtPatientId.IsEnabled = false;
+                btnSave.Visibility = Visibility.Hidden;
+
+                ToastNotificationService.ShowInformation("This blood bag has already been exported.");
             }
-        }
+            else
+            {
+                // Enable editing
+                txtPatientId.IsEnabled = true;
+                txtPatientId.Clear();
+                btnSave.Visibility = Visibility.Visible;
+                stExportedBy.Visibility = Visibility.Hidden;
+                stExportedDate.Visibility = Visibility.Hidden;
+                // Set focus to txtPatientId
+                txtPatientId.Focus();
 
+            }
+
+            // Show patient info card
+            patientInfoCard.Visibility = Visibility.Visible;
+        }
         private BloodBag SearchBloodBagById(string bloodBagId)
         {
             try
@@ -133,7 +146,7 @@ namespace NganHangMau2
                         {
                             if (reader.Read())
                             {
-                                return new BloodBag
+                                var bloodBag = new BloodBag
                                 {
                                     Id = reader["Id"].ToString(),
                                     BloodGroup = reader["BloodGroup"].ToString(),
@@ -144,8 +157,28 @@ namespace NganHangMau2
                                     EnteredBy = reader["EnteredBy"].ToString(),
                                     EnteredDate = Convert.ToDateTime(reader["EnteredDate"]),
                                     Status = reader["Status"].ToString()
-
                                 };
+
+                                if (bloodBag.Status == "Exported")
+                                {
+                                    reader.Close();
+                                    string exportQuery = "SELECT * FROM ExportedBloodBags WHERE BloodBagID = @Id";
+                                    using (SqlCommand exportCommand = new SqlCommand(exportQuery, connection))
+                                    {
+                                        exportCommand.Parameters.AddWithValue("@Id", bloodBagId);
+                                        using (SqlDataReader exportReader = exportCommand.ExecuteReader())
+                                        {
+                                            if (exportReader.Read())
+                                            {
+                                                bloodBag.ExportedBy = exportReader["ExportedBy"].ToString();
+                                                bloodBag.ExportedDate = Convert.ToDateTime(exportReader["ExportedDate"]);
+                                                bloodBag.ExportedTo = exportReader["ExportedTo"].ToString();
+                                            }
+                                        }
+                                    }
+                                }
+
+                                return bloodBag;
                             }
                         }
                     }
@@ -162,8 +195,7 @@ namespace NganHangMau2
             return null;
         }
 
-
-        private void UpdateBloodBagStatus(string bloodBagId, string newStatus)
+        private void ExportBloodBag(string bloodBagId, string patientName, DateTime exportedDate, string exportedBy)
         {
             try
             {
@@ -171,12 +203,14 @@ namespace NganHangMau2
                 {
                     connection.Open();
 
-                    string query = "UPDATE BloodBags SET Status = @Status WHERE Id = @Id";
-
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    using (SqlCommand command = new SqlCommand("ExportBloodBag", connection))
                     {
-                        command.Parameters.AddWithValue("@Id", bloodBagId);
-                        command.Parameters.AddWithValue("@Status", newStatus);
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.Parameters.AddWithValue("@IdBloodBag", bloodBagId);
+                        command.Parameters.AddWithValue("@PatientName", patientName);
+                        command.Parameters.AddWithValue("@ExportedDate", exportedDate);
+                        command.Parameters.AddWithValue("@ExportedBy", exportedBy);
 
                         command.ExecuteNonQuery();
                     }
@@ -185,7 +219,7 @@ namespace NganHangMau2
             }
             catch (SqlException ex)
             {
-                MessageBox.Show($"An error occurred while updating blood bag status: {ex.Message}");
+                MessageBox.Show($"An error occurred while exporting blood bag: {ex.Message}");
             }
             catch (Exception ex)
             {
@@ -193,37 +227,6 @@ namespace NganHangMau2
             }
         }
 
-        public void InsertExportedBloodBag(string bloodBagID, string exportedBy, DateTime exportedDate)
-        {
-            string query = "INSERT INTO ExportedBloodBags (BloodBagID, ExportedBy, ExportedDate) " +
-                           "VALUES (@BloodBagID, @ExportedBy, @ExportedDate)";
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@BloodBagID", bloodBagID);
-                command.Parameters.AddWithValue("@ExportedBy", exportedBy);
-                command.Parameters.AddWithValue("@ExportedDate", exportedDate);
-             
-                try
-                {
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    ToastNotificationService.ShowSuccess("Insert Blood bag exported successfully!");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("An error occurred: " + ex.Message);
-                }
-            }
-        }
-
-        private void UpdateBloodBagList()
-        {
-            dgvBloodBags.ItemsSource = null;
-            dgvBloodBags.ItemsSource = bloodBagsToExport;
-        }
-    
         private BloodBag ParseBloodBag(string data)
         {
             var parts = data.Split('|');
@@ -237,6 +240,7 @@ namespace NganHangMau2
                 EnteredBy = currentUserName
             };
         }
+
         private static void ClearTxtId(TextBox textBox)
         {
             // Clear the TextBox and set focus back to it
@@ -255,47 +259,31 @@ namespace NganHangMau2
                 return;
             }
 
-            addExportList(bloodBagId);
-        }
+            currentBloodBag = SearchBloodBagById(bloodBagId);
 
-        private void addExportList(string bloodBagId)
-        {
-            var bloodBag = SearchBloodBagById(bloodBagId);
-
-            if (bloodBag != null)
+            if (currentBloodBag != null)
             {
-                if (bloodBag.Status != "Exported")
-                {
-                    bloodBagsToExport.Add(bloodBag);
-                    UpdateBloodBagList();
-                }
-                else
-                {
-                    MessageBox.Show("Blood bag has already been exported.");
-                }
+                DisplayBloodBagInfo(currentBloodBag);
             }
             else
             {
                 MessageBox.Show("Blood bag not found.");
+                txtId.Clear();
+                txtId.Focus();
             }
         }
-        private void autoExport(string bloodBagId)
-        {
-            var bloodBag = SearchBloodBagById(bloodBagId);
 
-            if (bloodBag != null)
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentBloodBag != null)
             {
-                if (bloodBag.Status != "Exported")
-                {
-                    UpdateBloodBagStatus(bloodBag.Id, "Exported");
-                    InsertExportedBloodBag(bloodBag.Id, currentUserName, DateTime.Now);
-                }
-                else
-                {
-                    MessageBox.Show("Blood bag has already been exported.");
-                }
+                ExportBloodBag(currentBloodBag.Id, txtPatientId.Text, DateTime.Now, currentUserName);
+                currentBloodBag = null;
             }
-           
+            else
+            {
+                MessageBox.Show("No blood bag selected for export.");
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:NganHangMau2"
+             Loaded="UserControl_Loaded"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <UserControl.Resources>
         <local:IndexConverter x:Key="IndexConverter"/>
@@ -63,7 +64,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
-                    <TextBox x:Name="txtId"  
+                    <TextBox x:Name="txtId" 
                              materialDesign:HintAssist.Hint="Mã túi máu"
                              Foreground="Gray" 
                              Margin="5,0,0,10" 
@@ -128,7 +129,11 @@
                     </StackPanel>
                 </StackPanel>
 
-                <DataGrid Grid.Row="1" x:Name="dgvBloodBags" AutoGenerateColumns="False" VerticalScrollBarVisibility="Auto" IsReadOnly="True">
+                <DataGrid Grid.Row="1" x:Name="dgvBloodBags" 
+                          AutoGenerateColumns="False" 
+                          VerticalScrollBarVisibility="Auto" 
+                          VirtualizingStackPanel.IsVirtualizing="False"
+                          IsReadOnly="True">
                     <DataGrid.Columns>
                         <!-- Column for row number -->
                         <DataGridTemplateColumn Header="STT">
@@ -138,6 +143,7 @@
                                         <TextBlock.Text>
                                             <MultiBinding Converter="{StaticResource IndexConverter}">
                                                 <Binding RelativeSource="{RelativeSource AncestorType={x:Type DataGridRow}}"/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type DataGrid}}"/>
                                             </MultiBinding>
                                         </TextBlock.Text>
                                     </TextBlock>

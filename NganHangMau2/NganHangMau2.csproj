@@ -77,6 +77,9 @@
 	    <Generator>MSDataSetGenerator</Generator>
 	    <LastGenOutput>BloodStorageDataset.Designer.cs</LastGenOutput>
 	  </None>
+	  <None Update="error_log.txt">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

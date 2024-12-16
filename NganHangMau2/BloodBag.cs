@@ -21,6 +21,10 @@ namespace NganHangMau2
         public string EnteredBy { get; set; } = string.Empty;
         public DateTime EnteredDate { get; set; } = DateTime.Now;
         public string Status { get; set; } = string.Empty;
+        public string ExportedBy { get; set; } = string.Empty;
+        public DateTime ExportedDate { get; set; } = DateTime.Now;
+        public string ExportedTo { get; set; } = string.Empty;
+
 
     }
 }

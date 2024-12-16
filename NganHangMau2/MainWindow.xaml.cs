@@ -46,13 +46,13 @@ namespace NganHangMau2
             {
                 switch (selectedItem.Tag)
                 {
-                    case "Nhap":
+                    case "input":
                         MainContent.Content = new InputUserControl();
                         break;
-                    case "Xuat":
+                    case "output":
                         MainContent.Content = new OutputUserControl();
                         break;
-                    case "Timkiem":
+                    case "search":
                         MainContent.Content = new SearchUserControl();
                         break;
                 }

@@ -378,7 +378,7 @@ namespace NganHangMau2
                     }
                     if (!string.IsNullOrEmpty(volume))
                     {
-                        queryBuilder.Append(" AND Volume = @Volume");
+                        queryBuilder.Append(" AND VolumeNum = @VolumeNum");
                     }
                     if (productionDate.HasValue)
                     {
@@ -422,7 +422,8 @@ namespace NganHangMau2
                         }
                         if (!string.IsNullOrEmpty(volume))
                         {
-                            command.Parameters.AddWithValue("@Volume", volume);
+                            int VolumeNum = int.Parse(volume.Substring(0, 3));
+                            command.Parameters.AddWithValue("@VolumeNum", VolumeNum);
                         }
                         if (productionDate.HasValue)
                         {
@@ -475,6 +476,11 @@ namespace NganHangMau2
             }
 
             return results;
+        }
+
+        private void DataGrid_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = (e.Row.GetIndex() + 1).ToString(); // 1-based index
         }
 
         private void btnClear_Click(object sender, RoutedEventArgs e)

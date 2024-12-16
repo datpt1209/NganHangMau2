@@ -6,60 +6,156 @@
              xmlns:local="clr-namespace:NganHangMau2"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <local:IndexConverter x:Key="IndexConverter"/>
-    </UserControl.Resources>
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="{DynamicResource MaterialDesignPaper}">
     <Grid>
+        <StackPanel Margin="5,5,5,5">
+            <TextBox x:Name="txtId"  
+                     materialDesign:HintAssist.Hint="Mã túi máu"
+                     HorizontalAlignment="Stretch"
+                     Foreground="Gray" 
+                     Margin="5,5,5,10" 
+                     PreviewKeyDown="txtId_PreviewKeyDown"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
 
-        <materialDesign:Card Margin="5,5,5,5" Padding="10" Grid.ColumnSpan="2">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Margin="0,0,0,10">
-                    <TextBox x:Name="txtId"  
-                                 materialDesign:HintAssist.Hint="Mã túi máu"
-                                  HorizontalAlignment="Stretch"
-                                 Foreground="Gray" 
-                                 Margin="5,5,5,10" 
-                                 PreviewKeyDown="txtId_PreviewKeyDown"
-                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+            <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
+                <Button x:Name="btnSearch" Content="Search" Width="75" Click="btnSearch_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
+            </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="5,0,0,10">
-                        <Button x:Name="btnSearch" Content="Search" Width="75" Click="btnSearch_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
-                        <Button x:Name="btnExport" Content="Xuất" Width="75" Margin="10,0,0,0" Click="btnExport_Click" Style="{StaticResource MaterialDesignRaisedButton}"/>
+            <materialDesign:Card Margin="5,5,5,5" Padding="10" x:Name="bloodBagInfoCard" Visibility="Collapsed" Background="{DynamicResource MaterialDesignPaper}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.4*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Blood Group -->
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0">
+                        <TextBlock Text="Nhóm máu:" 
+                                   FontWeight="Bold" 
+                                   Margin="5,5,5,10" />
+                        <TextBlock x:Name="lblBloodGroup"  
+                                   Text="Nhóm máu"
+                                   HorizontalAlignment="Stretch"
+                                   Foreground="Gray" 
+                                   Margin="5,5,5,10" />
                     </StackPanel>
-                </StackPanel>
 
-                <DataGrid Grid.Row="1" x:Name="dgvBloodBags" AutoGenerateColumns="False" VerticalScrollBarVisibility="Auto" IsReadOnly="True">
-                    <DataGrid.Columns>
-                        <!-- Column for row number -->
-                        <DataGridTemplateColumn Header="STT">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock>
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource IndexConverter}">
-                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type DataGridRow}}"/>
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                    <!-- Blood Product Type -->
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1">
+                        <TextBlock Text="Loại chế phẩm:" 
+                                   FontWeight="Bold" 
+                                   Margin="5,5,5,10" />
+                        <TextBlock x:Name="lblBloodProductType"  
+                                   Text="Loại chế phẩm"
+                                   HorizontalAlignment="Stretch"
+                                   Foreground="Gray" 
+                                   Margin="5,5,5,10" />
+                    </StackPanel>
 
-                        <DataGridTextColumn Header="Mã túi máu" Binding="{Binding Id}" />
-                        <DataGridTextColumn Header="Nhóm máu" Binding="{Binding BloodGroup}" />
-                        <DataGridTextColumn Header="Loại chế phẩm" Binding="{Binding BloodProductType}" />
-                        <DataGridTextColumn Header="Ngày sản xuất" Binding="{Binding ProductionDate, StringFormat=dd/MM/yyyy}" />
-                        <DataGridTextColumn Header="Ngày hết hạn" Binding="{Binding ExpiryDate, StringFormat=dd/MM/yyyy}" />
-                        <DataGridTextColumn Header="Ngày nhập" Binding="{Binding EnteredDate,  StringFormat=dd/MM/yyyy}"/>
-                        <DataGridTextColumn Header="Người nhập" Binding="{Binding EnteredBy}" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-        </materialDesign:Card>
+                    <!-- Production Date -->
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
+                        <TextBlock Text="Ngày sản xuất:" 
+                                   FontWeight="Bold" 
+                                   Margin="5,5,5,10" />
+                        <TextBlock x:Name="lblProductionDate"  
+                                   Text="Ngày sản xuất"
+                                   HorizontalAlignment="Stretch"
+                                   Foreground="Gray" 
+                                   Margin="5,5,5,10" />
+                    </StackPanel>
+
+                    <!-- Expiry Date -->
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="3">
+                        <TextBlock Text="Ngày hết hạn:" 
+                                   FontWeight="Bold" 
+                                   Margin="5,5,5,10" />
+                        <TextBlock x:Name="lblExpiryDate"  
+                                   Text="Ngày hết hạn"
+                                   HorizontalAlignment="Stretch"
+                                   Foreground="Gray" 
+                                   Margin="5,5,5,10" />
+                    </StackPanel>
+
+                    <!-- Entered Date -->
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="4">
+                        <TextBlock Text="Ngày nhập:" 
+                                   FontWeight="Bold" 
+                                   Margin="5,5,5,10" />
+                        <TextBlock x:Name="lblEnteredDate"  
+                                   Text="Ngày nhập"
+                                   HorizontalAlignment="Stretch"
+                                   Foreground="Gray" 
+                                   Margin="5,5,5,10" />
+                    </StackPanel>
+
+                    <!-- Entered By -->
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="5">
+                        <TextBlock Text="Người nhập:" 
+                                   FontWeight="Bold" 
+                                   Margin="5,5,5,10" />
+                        <TextBlock x:Name="lblEnteredBy"  
+                                   Text="Người nhập"
+                                   HorizontalAlignment="Stretch"
+                                   Foreground="Gray" 
+                                   Margin="5,5,5,10" />
+                    </StackPanel>
+
+                    <!-- Exported By -->
+                    <StackPanel Name="stExportedBy" Visibility="Collapsed" Orientation="Horizontal" Grid.Column="0" Grid.Row="6">
+                        <TextBlock Text="Người xuất:" 
+                                   FontWeight="Bold" 
+                                   Margin="5,5,5,10" />
+                        <TextBlock x:Name="lblExportedBy"  
+                                   Text="Người xuất"
+                                   HorizontalAlignment="Stretch"
+                                   Foreground="Gray" 
+                                   Margin="5,5,5,10" />
+                    </StackPanel>
+
+                    <!-- Exported Date -->
+                    <StackPanel Name="stExportedDate" Visibility="Collapsed" Orientation="Horizontal" Grid.Column="0" Grid.Row="7">
+                        <TextBlock Text="Ngày xuất:" 
+                                   FontWeight="Bold" 
+                                   Margin="5,5,5,10" />
+                        <TextBlock x:Name="lblExportedDate"  
+                                   Text="Ngày xuất"
+                                   HorizontalAlignment="Stretch"
+                                   Foreground="Gray" 
+                                   Margin="5,5,5,10" />
+                    </StackPanel>
+
+                    <materialDesign:Card Grid.RowSpan="8" Margin="5,5,5,5" Grid.Column="1" Padding="10" x:Name="patientInfoCard" Visibility="Collapsed" Background="{DynamicResource MaterialDesignPaper}">
+                        <StackPanel x:Name="patientInfoPanel">
+                            <TextBox x:Name="txtPatientId"  
+                             materialDesign:HintAssist.Hint="ID bệnh nhân"
+                             HorizontalAlignment="Stretch"
+                             Foreground="Gray" 
+                             Margin="5,5,5,10" 
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+
+                            <Button x:Name="btnSave" 
+                                    Content="Lưu" 
+                                    Width="75" 
+                                    Margin="5" 
+                                    Click="btnSave_Click"
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Bottom" 
+                                    Style="{StaticResource MaterialDesignRaisedButton}"/>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </Grid>
+            </materialDesign:Card>
+        </StackPanel>
     </Grid>
 </UserControl>

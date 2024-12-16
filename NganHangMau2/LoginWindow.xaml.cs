@@ -24,12 +24,25 @@ namespace NganHangMau2
         public LoginWindow()
         {
             InitializeComponent();
+            CheckCapsLockStatus();
         }
 
         private void btnConfig_Click(object sender, RoutedEventArgs e)
         {
            ConfigWindow configWindow = new ConfigWindow();
             configWindow.ShowDialog();
+        }
+        private void CheckCapsLockStatus()
+        {
+            if (Keyboard.IsKeyToggled(Key.CapsLock))
+            {
+                MessageBox.Show(
+                    "Caps Lock đang bật. Vui lòng tắt Caps Lock để tránh nhập sai mật khẩu.",
+                    "Thông báo",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning
+                );
+            }
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -121,6 +134,11 @@ namespace NganHangMau2
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            txtUserName.Focus();
         }
     }
 }

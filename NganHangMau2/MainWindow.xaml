@@ -101,14 +101,18 @@
 
                     <!--// Home //-->
                     <ListViewItem 
-                        Tag="Nhap"
-            Name="HomeItem"
-            HorizontalAlignment="Left" Margin="0,0,0,0">
+                        Tag="input"
+                        FontSize="22"
+                        Background="Transparent"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Name="Input"
+                        Margin="0,0,0,0">
 
                         <StackPanel Orientation="Horizontal" Width="170">
                             <materialDesign:PackIcon Kind="Import" Margin="5,0,0,0"
                                          Height="30" Width="30" />
-                            <TextBlock Text="Nhap" Margin="0,0,0,0">
+                            <TextBlock Text="Nhập" Margin="5,0,0,0">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
@@ -127,14 +131,17 @@
                     <!--// Home //-->
 
 
-                    <ListViewItem  Name="Output" Tag="Xuat"
-                       HorizontalAlignment="Left" Margin="0,0,0,0" 
-                       >
-
+                    <ListViewItem  Name="Output"
+                                   Tag="output"
+                                   FontSize="22"
+                                   Background="Transparent"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Bottom"
+                                   Margin="0,0,0,0">
                         <StackPanel Orientation="Horizontal" Width="170">
                             <materialDesign:PackIcon Kind="Export" Margin="5,0,0,0"
                                Height="30" Width="30" />
-                            <TextBlock Text="Xuất" Margin="0,0,0,0">
+                            <TextBlock Text="Xuất" Margin="5,0,0,0">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
@@ -152,14 +159,18 @@
                     </ListViewItem>
                     <!--// Home //-->
                     <ListViewItem 
-            Name="Search"
-            HorizontalAlignment="Left" Margin="0,0,0,0" Tag="Timkiem"
-            >
+                        Name="Search"
+                        Margin="0,0,0,0" 
+                        Tag="search"
+                        FontSize="22"
+                        Background="Transparent"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom">
 
                         <StackPanel Orientation="Horizontal" Width="170">
                             <materialDesign:PackIcon Kind="CardSearchOutline" Margin="5,0,0,0"
                                Height="30" Width="30" />
-                            <TextBlock Text="Tìm kiếm" Margin="0,0,0,0">
+                            <TextBlock Text="Tìm kiếm" Margin="5,0,0,0">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>

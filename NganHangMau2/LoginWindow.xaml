@@ -7,6 +7,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Đăng nhập"
+        Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
         SizeToContent="WidthAndHeight"
         > <!-- Automatically size the window to fit the content -->
