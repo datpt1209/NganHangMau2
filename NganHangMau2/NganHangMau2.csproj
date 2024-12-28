@@ -10,13 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="blood-donation.ico" />
-    <None Remove="BloodData.json" />
-    <None Remove="BloodStorageReport2.rdlc" />
-    <None Remove="SupReport.rdlc" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
@@ -45,6 +38,9 @@
 
 	<ItemGroup>
 	  <EmbeddedResource Include="blood-donation.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="BloodStorage_BloodGroup.rdlc">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </EmbeddedResource>
 	  <EmbeddedResource Include="BloodStorageReport2.rdlc">

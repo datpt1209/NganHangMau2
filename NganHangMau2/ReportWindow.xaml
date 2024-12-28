@@ -9,10 +9,28 @@
         Title="ReportWindow" Height="450" Width="800"
         Loaded="Window_Loaded">
     <Grid>
-        <WindowsFormsHost>
-            <winforms:ReportViewer x:Name="reportViewer">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            </winforms:ReportViewer>
-        </WindowsFormsHost>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10">
+            <RadioButton x:Name="radioButton1" Content="Hồ sơ nhập máu" Checked="RadioButton_Checked" Margin="0,0,10,0"/>
+            <RadioButton x:Name="radioButton2" Content="Hồ sơ kiểm tra nhóm máu" Checked="RadioButton_Checked"/>
+        </StackPanel>
+        <WindowsFormsHost  Visibility="Collapsed" Name="windowsFormsHost1" Grid.Row="1">
+                <winforms:ReportViewer x:Name="reportViewer">
+
+                </winforms:ReportViewer>
+
+            </WindowsFormsHost>
+
+        <WindowsFormsHost Name="windowsFormsHost2"   Visibility="Collapsed" Grid.Row="1" >
+                <winforms:ReportViewer x:Name="reportViewer2">
+
+                </winforms:ReportViewer>
+
+            </WindowsFormsHost>
+       
     </Grid>
 </Window>
